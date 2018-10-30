@@ -29,4 +29,7 @@ dependencies {
     androidTestCompile('com.android.support:support-annotations:26.1.0') {
         force = true
     }
+    compile 'com.android.support:design:26.1.0'
+    //底部导航栏样式BottomNavigationBar
+    compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.3'
 }

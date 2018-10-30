@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LifeAssistant</string>
+    <string name="app_name">Navigation</string>
     <string name="drawer_layout_open">Open</string>
     <string name="drawer_layout_close">Close</string>
     <string name="blog_site">Blog:http://blog.csdn.net/student9128</string>
