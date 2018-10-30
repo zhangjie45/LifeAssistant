@@ -13,7 +13,7 @@
     <string name="navigation_tab_host">TabHost</string>
 
     <string name="item_home">Home</string>
-    <string name="item_location">Location</string>
-    <string name="item_like">Like</string>
-    <string name="item_person">Me</string>
+    <string name="item_date">Location</string>
+    <string name="item_capital">Like</string>
+    <string name="item_setting">Me</string>
 </resources>
