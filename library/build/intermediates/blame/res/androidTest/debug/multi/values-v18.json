@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "F:\\AndroidStudioProject\\AndroidStudioProject\\LifeAssistant\\library\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v18\\values-v18.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 48,
+                    "endOffset": 99
+                },
+                "from": {
+                    "file": "E:\\android studio\\gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.1.0.aar\\737a1255d03a4dc3b7d4c4a1df5c570f\\res\\values-v18\\values-v18.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 48,
+                        "endOffset": 99
+                    }
+                }
+            }
+        ]
+    }
+]
