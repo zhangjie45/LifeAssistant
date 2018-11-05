@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.pc.lifeassistant.R;
-import com.example.pc.lifeassistant.fragment.CaptialFragment;
+import com.example.pc.lifeassistant.fragment.CapitalFragment;
 import com.example.pc.lifeassistant.fragment.DateFragment;
 import com.example.pc.lifeassistant.fragment.HomeFragment;
 import com.example.pc.lifeassistant.fragment.SettingFragment;
@@ -19,7 +19,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private BottomNavigationBar bottomNavigationBar;
     private HomeFragment homeFragment;
     private DateFragment dateFragment;
-    private CaptialFragment captialFragment;
+    private CapitalFragment capitalFragment;
     private SettingFragment settingFragment;
     private TextView tv_tb_add;
 
@@ -85,10 +85,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             case 2:
                 tv_tb_add.setVisibility(View.VISIBLE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "资金管理", false);
-                if (captialFragment == null) {
-                    captialFragment = CaptialFragment.newInstance(getString(R.string.item_capital));
+                if (capitalFragment == null) {
+                    capitalFragment = CapitalFragment.newInstance(getString(R.string.item_capital));
                 }
-                transaction.replace(R.id.sub_content, captialFragment);
+                transaction.replace(R.id.sub_content, capitalFragment);
                 break;
             case 3:
                 tv_tb_add.setVisibility(View.GONE);

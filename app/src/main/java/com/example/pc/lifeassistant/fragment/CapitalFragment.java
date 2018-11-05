@@ -9,22 +9,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
+import com.example.pc.lifeassistant.ui.AddCapitalActivity;
+import com.example.pc.lifeassistant.ui.AddDateActivity;
 import com.example.pc.lifeassistant.util.BaseFragment;
 
 /**
  * Created by pc on 2018/10/30.
  */
 
-public class CaptialFragment extends BaseFragment implements View.OnClickListener {
+public class CapitalFragment extends BaseFragment implements View.OnClickListener {
     private String name;
     private TextView tv_tb_add_date;
 
-    public static final CaptialFragment newInstance(String name) {
-        CaptialFragment captialFragment = new CaptialFragment();
+    public static final CapitalFragment newInstance(String name) {
+        CapitalFragment capitalFragment = new CapitalFragment();
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
-        captialFragment.setArguments(bundle);
-        return captialFragment;
+        capitalFragment.setArguments(bundle);
+        return capitalFragment;
 
     }
 
@@ -48,8 +50,21 @@ public class CaptialFragment extends BaseFragment implements View.OnClickListene
         return view;
     }
 
+
+
+
+
+
+
+
     @Override
     public void onClick(View v) {
-        ToastUtil("你点击了资金管理界面的添加按钮");
+        switch (v.getId()) {
+            case R.id.tv_tb_add:
+                fragmentToActivity(AddCapitalActivity.class);
+                break;
+        }
+
+
     }
 }

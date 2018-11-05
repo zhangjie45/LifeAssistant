@@ -53,7 +53,11 @@ public class DateFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //    ToastUtil("你点击了日程管理界面的添加按钮");
-        fragmentToActivity(AddDateActivity.class);
+        switch (v.getId()) {
+            case R.id.tv_tb_add:
+                fragmentToActivity(AddDateActivity.class);
+                break;
+        }
+
     }
 }

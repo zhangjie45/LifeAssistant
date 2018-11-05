@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.AddDateActivity" />
+        <activity android:name=".ui.AddCapitalActivity" />
     </application>
 
 </manifest>
