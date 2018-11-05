@@ -1,10 +1,16 @@
 package com.example.pc.lifeassistant.util;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -66,4 +72,5 @@ public class BaseActivity extends SwipeBackActivity {
         });
         return toolbar;
     }
+
 }

@@ -3,8 +3,11 @@
 
 
     <string name="item_home">首页</string>
-    <string name="item_date">日程管理</string>
-    <string name="item_capital">资金管理</string>
+    <string name="item_date">日程</string>
+    <string name="item_capital">资金</string>
     <string name="item_setting">设置</string>
     <string name="item_add">添加</string>
+    <string name="btn_note">随手记</string>
+    <string name="note_null">随手记为空,请添加内容吧。</string>
+    <string name="clear">清空</string>
 </resources>

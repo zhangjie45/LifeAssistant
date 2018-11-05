@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.ui.AddDateActivity;
+import com.example.pc.lifeassistant.ui.RemindOthersActivity;
 import com.example.pc.lifeassistant.util.BaseFragment;
 
 import org.w3c.dom.Text;
@@ -18,7 +19,7 @@ import org.w3c.dom.Text;
  * Created by pc on 2018/10/30.
  */
 
-public class DateFragment extends BaseFragment implements View.OnClickListener {
+public class DateFragment extends BaseFragment implements View.OnClickListener, View.OnLongClickListener {
     private String name;
     private TextView tv_tb_add_date;
 
@@ -48,6 +49,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_date, null);
         tv_tb_add_date = getActivity().findViewById(R.id.tv_tb_add);
         tv_tb_add_date.setOnClickListener(this);
+        tv_tb_add_date.setOnLongClickListener(this);
         return view;
     }
 
@@ -59,5 +61,15 @@ public class DateFragment extends BaseFragment implements View.OnClickListener {
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_tb_add:
+                fragmentToActivity(RemindOthersActivity.class);
+                break;
+        }
+        return true;
     }
 }

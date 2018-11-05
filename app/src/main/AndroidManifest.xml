@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".ui.MainActivity">
 
             <intent-filter>
@@ -19,6 +20,8 @@
         </activity>
         <activity android:name=".ui.AddDateActivity" />
         <activity android:name=".ui.AddCapitalActivity" />
+        <activity android:name=".ui.RemindOthersActivity" />
+        <activity android:name=".ui.NoteActivity" />
     </application>
 
 </manifest>
