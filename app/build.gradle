@@ -32,6 +32,12 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     //底部导航栏样式BottomNavigationBar库
     compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.3'
-    //  implementation project(':library')
+    //右滑退出库
     implementation project(':library')
+    // LeanCloud 基础包
+    compile ('cn.leancloud.android:avoscloud-sdk:v4.7.3')
+    // LeanCloud 统计包
+    compile ('cn.leancloud.android:avoscloud-statistics:v4.7.3')
+
+
 }

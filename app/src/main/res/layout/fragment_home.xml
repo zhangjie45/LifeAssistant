@@ -16,6 +16,6 @@
         android:src="@drawable/item_note"
         app:backgroundTint="@color/toolbar_color"
         app:elevation="5dp"
-        app:fabSize="mini"
+        app:fabSize="normal"
         app:rippleColor="@color/white" />
 </RelativeLayout>
