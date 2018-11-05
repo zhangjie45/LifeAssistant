@@ -6,4 +6,5 @@
     <string name="item_date">日程管理</string>
     <string name="item_capital">资金管理</string>
     <string name="item_setting">设置</string>
+    <string name="item_add">添加</string>
 </resources>

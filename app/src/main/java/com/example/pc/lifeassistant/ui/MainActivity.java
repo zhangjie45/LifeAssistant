@@ -3,6 +3,8 @@ package com.example.pc.lifeassistant.ui;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -11,14 +13,15 @@ import com.example.pc.lifeassistant.fragment.CaptialFragment;
 import com.example.pc.lifeassistant.fragment.DateFragment;
 import com.example.pc.lifeassistant.fragment.HomeFragment;
 import com.example.pc.lifeassistant.fragment.SettingFragment;
-import com.example.pc.lifeassistant.util.Utils;
+import com.example.pc.lifeassistant.util.BaseActivity;
 
-public class MainActivity extends Utils implements BottomNavigationBar.OnTabSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
     private BottomNavigationBar bottomNavigationBar;
     private HomeFragment homeFragment;
     private DateFragment dateFragment;
     private CaptialFragment captialFragment;
     private SettingFragment settingFragment;
+    private TextView tv_tb_add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,37 +56,42 @@ public class MainActivity extends Utils implements BottomNavigationBar.OnTabSele
     }
 
     public void init() {
-        bottomNavigationBar = findViewById(R.id.bottom_nar_bar);
+        bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_nar_bar);
+        tv_tb_add = (TextView) findViewById(R.id.tv_tb_add);
 
     }
+
     @Override
     public void onTabSelected(int position) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         switch (position) {
             case 0:
+                tv_tb_add.setVisibility(View.GONE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "首页");
                 if (homeFragment == null) {
-                    homeFragment = HomeFragment.newInstance(getString(R.string.item_setting));
+                    homeFragment = HomeFragment.newInstance(getString(R.string.item_home));
                 }
                 transaction.replace(R.id.sub_content, homeFragment);
                 break;
             case 1:
+                tv_tb_add.setVisibility(View.VISIBLE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "日程管理");
                 if (dateFragment == null) {
-                    dateFragment = DateFragment.newInstance(getString(R.string.item_setting));
+                    dateFragment = DateFragment.newInstance(getString(R.string.item_date));
                 }
                 transaction.replace(R.id.sub_content, dateFragment);
                 break;
             case 2:
-
+                tv_tb_add.setVisibility(View.VISIBLE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "资金管理");
                 if (captialFragment == null) {
-                    captialFragment = CaptialFragment.newInstance(getString(R.string.item_setting));
+                    captialFragment = CaptialFragment.newInstance(getString(R.string.item_capital));
                 }
                 transaction.replace(R.id.sub_content, captialFragment);
                 break;
             case 3:
+                tv_tb_add.setVisibility(View.GONE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "设置");
                 if (settingFragment == null) {
                     settingFragment = SettingFragment.newInstance(getString(R.string.item_setting));
