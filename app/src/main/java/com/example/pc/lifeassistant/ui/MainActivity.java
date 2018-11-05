@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .setFirstSelectedPosition(0)
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
-        initToolbar(R.id.tl_, R.id.toolbar_title, "首页");
+        initToolbar(R.id.tl_, R.id.toolbar_title, "首页", false);
         setDefaultFragment();
     }
 
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         switch (position) {
             case 0:
                 tv_tb_add.setVisibility(View.GONE);
-                initToolbar(R.id.tl_, R.id.toolbar_title, "首页");
+                initToolbar(R.id.tl_, R.id.toolbar_title, "首页", false);
                 if (homeFragment == null) {
                     homeFragment = HomeFragment.newInstance(getString(R.string.item_home));
                 }
@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case 1:
                 tv_tb_add.setVisibility(View.VISIBLE);
-                initToolbar(R.id.tl_, R.id.toolbar_title, "日程管理");
+                initToolbar(R.id.tl_, R.id.toolbar_title, "日程管理", false);
                 if (dateFragment == null) {
                     dateFragment = DateFragment.newInstance(getString(R.string.item_date));
                 }
@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case 2:
                 tv_tb_add.setVisibility(View.VISIBLE);
-                initToolbar(R.id.tl_, R.id.toolbar_title, "资金管理");
+                initToolbar(R.id.tl_, R.id.toolbar_title, "资金管理", false);
                 if (captialFragment == null) {
                     captialFragment = CaptialFragment.newInstance(getString(R.string.item_capital));
                 }
@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case 3:
                 tv_tb_add.setVisibility(View.GONE);
-                initToolbar(R.id.tl_, R.id.toolbar_title, "设置");
+                initToolbar(R.id.tl_, R.id.toolbar_title, "设置", false);
                 if (settingFragment == null) {
                     settingFragment = SettingFragment.newInstance(getString(R.string.item_setting));
                 }

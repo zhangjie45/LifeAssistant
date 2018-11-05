@@ -3,6 +3,7 @@ package com.example.pc.lifeassistant.util;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -36,7 +37,7 @@ public class BaseActivity extends SwipeBackActivity {
         // 设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
         swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
-        // mSwipeBackLayout.setEdgeSize(200);
+        swipeBackLayout.setEdgeSize(200);
     }
 
     /**
@@ -46,17 +47,23 @@ public class BaseActivity extends SwipeBackActivity {
         setSwipeBackEnable(false);
     }
 
-    public Toolbar initToolbar(int id, int titleId, String titleString) {
+    public Toolbar initToolbar(int id, int titleId, String titleString, boolean homeAsUp) {
         Toolbar toolbar = (Toolbar) findViewById(id);
         TextView textView = (TextView) findViewById(titleId);
         textView.setText(titleString);
         setSupportActionBar(toolbar);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            //设置toolbar左侧返回按钮隐藏
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            //根据homeAsUp的值设置toolbar左侧返回按钮隐藏
+            actionBar.setDisplayHomeAsUpEnabled(homeAsUp);
             actionBar.setDisplayShowTitleEnabled(false);
         }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         return toolbar;
     }
 }

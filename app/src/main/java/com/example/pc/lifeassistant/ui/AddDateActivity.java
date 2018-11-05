@@ -16,7 +16,7 @@ public class AddDateActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_date);
-        initToolbar(R.id.tl_, R.id.toolbar_title, "日程添加");
+        initToolbar(R.id.tl_, R.id.toolbar_title, "日程添加", true);
         initSwipeBack();
     }
 }
