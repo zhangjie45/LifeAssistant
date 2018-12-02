@@ -8,9 +8,18 @@ import java.util.List;
  */
 
 public class CapitalInfo {
+    private String incomeOrexpenditure;
     private String time;
     private String type;
     private int amount;
+
+    public String getIncomeOrexpenditure() {
+        return incomeOrexpenditure;
+    }
+
+    public void setIncomeOrexpenditure(String incomeOrexpenditure) {
+        this.incomeOrexpenditure = incomeOrexpenditure;
+    }
 
     public String getTime() {
         return time;
@@ -38,35 +47,63 @@ public class CapitalInfo {
 
     public List<CapitalInfo> addData() {
         List<CapitalInfo> mList = new ArrayList<>();
+        String[] incomeOrexpenditure = {
+                "支出",
+                "支出",
+                "支出",
+                "收入",
+                "收入",
+                "支出",
+                "支出",
+                "支出",
+                "收入",
+                "收入",
+        };
         String[] times = {
-                "20170507",
-                "20170507",
-                "20170507",
-                "20170507",
-                "20170507",
-                "20170507",
+                "20181202",
+                "20181202",
+                "20181202",
+                "20181202",
+                "20181203",
+                "20181207",
+                "20181208",
+                "20181208",
+                "20181210",
+                "20181212",
+
         };
         String[] type = new String[]{
-                "去小北门拿快递",
-                "跟同事一起聚餐",
-                "写文档",
-                "和产品开会",
-                "整理开会内容",
-                "提交代码到git上"
+                "网购",
+                "零食",
+                "早饭",
+                "红包",
+                "工资",
+                "午饭",
+                "买菜",
+                "水电费",
+                "报销",
+                "兼职",
+
+
         };
         int[] amount = new int[]{
-                15,
-                15,
-                15,
-                15,
-                15,
-                15,
+                200,
+                100,
+                10,
+                150,
+                1500,
+                20,
+                78,
+                126,
+                1500,
+                750,
         };
         for (int i = 0; i < times.length; i++) {
             CapitalInfo capitalInfo = new CapitalInfo();
             capitalInfo.setTime(times[i]);
             capitalInfo.setAmount(amount[i]);
-            capitalInfo.setType(times[i]);
+            capitalInfo.setType(type[i]);
+            capitalInfo.setIncomeOrexpenditure(incomeOrexpenditure[i]);
             mList.add(capitalInfo);
         }
         return mList;

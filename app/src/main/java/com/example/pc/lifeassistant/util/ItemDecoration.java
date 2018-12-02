@@ -21,23 +21,19 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
         this.context = context;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(2); //时间轴线的宽度。
+        mPaint.setStrokeWidth(3); //时间轴线的宽度。
         mPaint.setColor(Color.BLACK); //时间轴线的颜色。
     }
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
-
         int childCount = parent.getChildCount();
-
         for (int i = 0; i < childCount; i++) {
             View view = parent.getChildAt(i);
-
             float left = dip2px(context, 14 + 10);
             float bottom = view.getBottom();
-
-            c.drawLine(left, dip2px(context, (50 - 20) / 2), left, bottom, mPaint);
+            c.drawLine(left, dip2px(context, (50 - 10) / 2), left, bottom, mPaint);
         }
     }
 

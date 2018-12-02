@@ -70,7 +70,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
             adapter = new CapitalAdapter(getActivity());
         recyclerView.clearAnimation();
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new ItemDecoration(getActivity()));
+//        recyclerView.addItemDecoration(new ItemDecoration(getActivity()));
         tv_tb_add_date.setOnClickListener(this);
     }
 
