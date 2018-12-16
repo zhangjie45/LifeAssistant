@@ -5,7 +5,7 @@ android {
     buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.example.pc.lifeassistant"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -38,6 +38,8 @@ dependencies {
     implementation 'com.github.florent37:materialtextfield:1.0.7'
     //时间轴库
     compile 'com.github.vipulasri:timelineview:1.0.6'
+    //圆形图片
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     // LeanCloud 基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v4.7.3'
     // LeanCloud 统计包

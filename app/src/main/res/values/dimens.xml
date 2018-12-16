@@ -6,4 +6,5 @@
     <dimen name="font_size_16">16sp</dimen>
     <dimen name="font_size_15">15sp</dimen>
     <dimen name="font_size_14">14sp</dimen>
+    <dimen name="drawable_padding_0">-5sp</dimen>
 </resources>

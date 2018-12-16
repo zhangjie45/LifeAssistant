@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Calendar;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -71,6 +72,22 @@ public class BaseActivity extends SwipeBackActivity {
             }
         });
         return toolbar;
+    }
+
+    /*
+    判断日期是否超过今天 1：超过 2：等于 3：没超过
+     */
+    public static int getTimeCompareSize(int selectYear, int selectMonth, int selectDay) {
+        int i = 0;
+        Calendar c = Calendar.getInstance();
+        if (selectYear > c.get(Calendar.YEAR) || selectMonth > c.get(Calendar.MONTH) || selectDay > c.get(Calendar.DAY_OF_MONTH)) {
+            i = 1;
+        } else if (selectYear == c.get(Calendar.YEAR) && selectMonth == c.get(Calendar.MONTH) && selectDay == c.get(Calendar.DAY_OF_MONTH)) {
+            i = 2;
+        } else {
+            i = 3;
+        }
+        return i;
     }
 
 }

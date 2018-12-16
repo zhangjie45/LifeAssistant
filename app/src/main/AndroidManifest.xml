@@ -20,8 +20,10 @@
         </activity>
         <activity android:name=".ui.AddDateActivity" />
         <activity android:name=".ui.AddCapitalActivity" />
+        <activity android:name=".ui.AddCapitalRemakesDialog" />
         <activity android:name=".ui.RemindOthersActivity" />
         <activity android:name=".ui.NoteActivity" />
+
     </application>
 
 </manifest>
