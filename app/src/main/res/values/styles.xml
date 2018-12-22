@@ -96,4 +96,32 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="InputStyle">
+        <!-- 底部线 默认颜色 -->
+        <item name="colorControlNormal">@android:color/white</item>
+        <!-- 底部线 EditText激活时颜色 -->
+        <item name="colorControlActivated">@android:color/white</item>
+        <!-- 设置光标 -->
+        <!--<item name="android:textCursorDrawable">@drawable/line</item>-->
+    </style>
+
+    <!--浮动标签-->
+    <style name="hintAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_color_default</item>
+    </style>
+
+    <!--错误提示信息-->
+    <style name="errorAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/event_agency</item>
+    </style>
+
+    <!--超出计数最大长度,浮动标签,下划线,计数文字都会改变颜色-->
+    <style name="counterOverflowTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/event_agency</item>
+
+    </style>
+
 </resources>

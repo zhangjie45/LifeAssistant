@@ -2,9 +2,14 @@ package com.example.pc.lifeassistant.util;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,4 +95,54 @@ public class BaseActivity extends SwipeBackActivity {
         return i;
     }
 
+    /*
+        TextInputEditText情况下  判断字数是否超过要求
+     */
+    public void TIETextChange(TextInputEditText textInputEditText, final TextInputLayout textInputLayout, final int minLength) {
+        textInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > minLength) {
+                    textInputLayout.setErrorEnabled(true);
+                    textInputLayout.setError("字数超过" + minLength + "个");
+                } else {
+                    textInputLayout.setErrorEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    /*
+      EditText情况下  判断字数是否超过要求
+   */
+    public void EditTextChange(EditText editText, final TextInputLayout textInputLayout, final int minLength) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > minLength) {
+                    textInputLayout.setErrorEnabled(true);
+                    textInputLayout.setError("字数超过" + minLength + "个");
+                } else {
+                    textInputLayout.setErrorEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
 }

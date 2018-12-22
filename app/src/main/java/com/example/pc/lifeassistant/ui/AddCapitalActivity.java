@@ -178,11 +178,11 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         String str = null;
         if (data == null) {
-       //     Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+            //     Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
         } else {
             str = data.getStringExtra("data");
         }
-     //   Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     public void keyBoard() {
@@ -222,10 +222,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                        tv_add_capital_date_year.setText(year + "");
-//                        tv_add_capital_date_day.setText(monthOfYear + 1 + "/" + dayOfMonth);
-                        // int selectMonth = monthOfYear + 1;
-                        // int num = getTimeCompareSize(year, monthOfYear, dayOfMonth);
+//
                         if (getTimeCompareSize(year, monthOfYear, dayOfMonth) > 1) {
                             tv_add_capital_date_year.setText(year + "");
                             tv_add_capital_date_day.setText(monthOfYear + 1 + "/" + dayOfMonth);
@@ -233,8 +230,6 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                             Toast.makeText(AddCapitalActivity.this, "所选时间超出范围", Toast.LENGTH_SHORT).show();
 
                         }
-                        //Log.e("比较结果：", String.valueOf(num));
-
                     }
                 }
                 // 设置初始日期

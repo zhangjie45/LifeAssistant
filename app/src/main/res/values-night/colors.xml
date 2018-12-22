@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E51C23</color>
-    <color name="colorPrimaryDark">#D01716</color>
-    <color name="colorAccent">#E040FB</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#dbdbdb</color>
+    <color name="colorAccent">#616161</color>
     <color name="transparent">#00000000</color>
-    <color name="white">#FFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="grey_200">#EEEEEE</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="black">#000000</color>
     <color name="black_1">#333333</color>
-    <color name="amber">#BB9C27B0</color>
+    <color name="amber">#BBFFC107</color>
+    <color name="bottom_navigation_item_color">#5dccfb</color>
+    <color name="toolbar_color">#4dc8f7</color>
+    <color name="home_item_color">#15b4fe</color>
+    <color name="home_bg_color">#15b4fe</color>
+    <color name="event_agency">#ff9800</color>
+    <color name="consume_month">#9c27b0</color>
+    <color name="item_remind">#ee0000</color>
+    <color name="text_color_default">#737373</color>
     <color name="key_ok_color">#1280FA</color>
     <color name="key_ok_color_pressed">#0174f2</color>
 </resources>
