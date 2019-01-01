@@ -72,8 +72,10 @@ public class RemindOthersActivity extends BaseActivity implements View.OnClickLi
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (getTimeCompareSize(year, monthOfYear, dayOfMonth) == 1) {
-                            int month = monthOfYear + 1;
+                        int month = monthOfYear + 1;
+                        String data = year + "/" + month + "/" + dayOfMonth;
+                        if (getTimeCompareSize(StrToDate(data)) == 1) {
+                            //   int month = monthOfYear + 1;
                             et_remind_date.setText(year + "/" + month + "/" + dayOfMonth);
                         } else {
                             et_remind_date.setText("所选日期不能小于今天");

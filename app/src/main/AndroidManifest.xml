@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.LoginActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +23,7 @@
         <activity android:name=".ui.AddCapitalRemakesDialog" />
         <activity android:name=".ui.RemindOthersActivity" />
         <activity android:name=".ui.NoteActivity" />
+        <activity android:name=".ui.MainActivity" />
 
     </application>
 

@@ -42,7 +42,7 @@ public class SettingFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, null);
-        ToastUtil(name);
+        //  ToastUtil(name);
         return view;
     }
 }

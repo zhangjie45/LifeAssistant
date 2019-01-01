@@ -1,5 +1,7 @@
 package com.example.pc.lifeassistant.util;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TextInputEditText;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +19,11 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -79,18 +86,58 @@ public class BaseActivity extends SwipeBackActivity {
         return toolbar;
     }
 
+    /**
+     * 功能描述:简单地Activity的跳转(不携带任何数据)
+     *
+     * @param activity       发起跳转的Activity实例
+     * @param TargetActivity 目标Activity实例
+     */
+    public static void skipAnotherActivity(Activity activity,
+                                           Class<? extends Activity> cls) {
+        Intent intent = new Intent(activity, cls);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
+
+    /*
+    字符串转日期
+     */
+    public static Date StrToDate(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = null;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     /*
     判断日期是否超过今天 1：超过 2：等于 3：没超过
      */
-    public static int getTimeCompareSize(int selectYear, int selectMonth, int selectDay) {
+    public static int getTimeCompareSize(Date selectDate) {
         int i = 0;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+        //获取当前时间
+
         Calendar c = Calendar.getInstance();
-        if (selectYear > c.get(Calendar.YEAR) || selectMonth > c.get(Calendar.MONTH) || selectDay > c.get(Calendar.DAY_OF_MONTH)) {
+        int now_month = c.get(Calendar.MONTH) + 1;
+        String now_data = c.get(Calendar.YEAR) + "/" + now_month + "/" + c.get(Calendar.DAY_OF_MONTH);
+        Log.e("选择日期:", simpleDateFormat.format(selectDate));
+        Log.e("今日:", simpleDateFormat.format(StrToDate(now_data)));
+        int result = StrToDate(now_data).compareTo(selectDate);
+        if (selectDate.getTime() > StrToDate(now_data).getTime()) {
+            Log.e("比较结果", "选择日期大于今日");
             i = 1;
-        } else if (selectYear == c.get(Calendar.YEAR) && selectMonth == c.get(Calendar.MONTH) && selectDay == c.get(Calendar.DAY_OF_MONTH)) {
+        } else if (result == 0) {
+            Log.e("比较结果", "选择日期等于今日");
             i = 2;
         } else {
             i = 3;
+            Log.e("比较结果", "选择日期小于今日");
         }
         return i;
     }

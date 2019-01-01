@@ -72,6 +72,7 @@
                     android:src="@drawable/icon_type_money" />
 
                 <TextView
+                    android:id="@+id/tv_type_money_show"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"

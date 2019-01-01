@@ -124,4 +124,11 @@
 
     </style>
 
+    <!-- checkbox 样式-->
+
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/text_color_default</item>
+        <item name="colorControlActivated">@color/home_item_color</item>
+    </style>
+
 </resources>

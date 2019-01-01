@@ -15,6 +15,7 @@ import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by pc on 2018/11/4.
@@ -96,8 +97,9 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (getTimeCompareSize(year, monthOfYear, dayOfMonth) == 1) {
-                            int month = monthOfYear + 1;
+                        int month = monthOfYear + 1;
+                        String data = year + "/" + month + "/" + dayOfMonth;
+                        if (getTimeCompareSize(StrToDate(data)) == 1) {
                             et_add_date.setText(year + "/" + month + "/" + dayOfMonth);
                         } else {
                             et_add_date.setText("所选日期不能小于今天");

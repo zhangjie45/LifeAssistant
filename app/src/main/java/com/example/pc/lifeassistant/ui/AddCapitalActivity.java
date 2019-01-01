@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -44,7 +45,8 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     private TextView tv_add_capital_sum;
     private TextView tv_add_capital_date_year;
     private TextView tv_add_capital_date_day;
-
+    private TextView tv_type_money_show;
+    private TextView tv_add_capital_remakes;
     private EditText et_amount;
 
     public String[] inCome = {"一般", "报销", "工资", "红包", "兼职"
@@ -80,9 +82,10 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         tv_expense = (TextView) findViewById(R.id.tv_expense);
         tv_add_capital_plus = (TextView) findViewById(R.id.tv_add_capital_plus);
         tv_add_capital_sum = (TextView) findViewById(R.id.tv_add_capital_sum);
+        tv_type_money_show = (TextView) findViewById(R.id.tv_type_money_show);
         tv_add_capital_date_year = (TextView) findViewById(R.id.tv_add_capital_date_year);
         tv_add_capital_date_day = (TextView) findViewById(R.id.tv_add_capital_date_day);
-        TextView tv_add_capital_remakes = (TextView) findViewById(R.id.tv_add_capital_remakes);
+        tv_add_capital_remakes = (TextView) findViewById(R.id.tv_add_capital_remakes);
         keyboard_view = (MoneyKeyBoard) findViewById(R.id.keyboard_view);
         et_amount = (EditText) findViewById(R.id.et);
         tv_income.setOnClickListener(this);
@@ -94,7 +97,14 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         add();
         typeMoneyAdapter = new TypeMoneyAdapter(this, list);
         gv_type_money.setAdapter(typeMoneyAdapter);
-
+        gv_type_money.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                typeMoneyAdapter.setSeclection(position);
+                typeMoneyAdapter.notifyDataSetChanged();
+                tv_type_money_show.setText(list.get(position).getTv_type_money());
+            }
+        });
 
     }
 
@@ -124,6 +134,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                 add();
                 typeMoneyAdapter = new TypeMoneyAdapter(this, list);
                 gv_type_money.setAdapter(typeMoneyAdapter);
+
                 break;
             case R.id.tv_expense:
                 tv_expense.setTextColor(getResources().getColor(R.color.toolbar_color));
@@ -222,10 +233,11 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//
-                        if (getTimeCompareSize(year, monthOfYear, dayOfMonth) > 1) {
+                        int month = monthOfYear + 1;
+                        String data = year + "/" + month + "/" + dayOfMonth;
+                        if (getTimeCompareSize(StrToDate(data)) > 1) {
                             tv_add_capital_date_year.setText(year + "");
-                            tv_add_capital_date_day.setText(monthOfYear + 1 + "/" + dayOfMonth);
+                            tv_add_capital_date_day.setText(month + "/" + dayOfMonth);
                         } else {
                             Toast.makeText(AddCapitalActivity.this, "所选时间超出范围", Toast.LENGTH_SHORT).show();
 
