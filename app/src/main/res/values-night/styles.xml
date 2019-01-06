@@ -23,9 +23,8 @@
 
     <style name="toolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/toolbar_color</item>
-        <!--<item name="android:actionBarSize">46dp</item>-->
+        <item name="android:actionBarSize">46dp</item>
         <item name="android:homeAsUpIndicator">@drawable/item_back</item>
-
         <item name="android:elevation">5dp</item>
     </style>
 

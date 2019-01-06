@@ -99,6 +99,19 @@ public class BaseActivity extends SwipeBackActivity {
         activity.finish();
     }
 
+    /**
+     * 功能描述:简单地Activity的跳转(不携带任何数据,不销毁当前Activity)
+     *
+     * @param activity       发起跳转的Activity实例
+     * @param TargetActivity 目标Activity实例
+     */
+    public static void skipAnotherActivityNoFinish(Activity activity,
+                                                   Class<? extends Activity> cls) {
+        Intent intent = new Intent(activity, cls);
+        activity.startActivity(intent);
+
+    }
+
 
     /*
     字符串转日期

@@ -24,6 +24,8 @@
         <activity android:name=".ui.RemindOthersActivity" />
         <activity android:name=".ui.NoteActivity" />
         <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.OpinionActivity" />
 
     </application>
 

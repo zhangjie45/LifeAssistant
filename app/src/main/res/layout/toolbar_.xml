@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clipToPadding="true">
+    android:clipToPadding="true"
+    app:contentInsetStart="0dp">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -15,9 +16,17 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/tl_"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="5dp"
-            android:minHeight="?attr/actionBarSize">
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="@drawable/item_back">
+
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/item_back"-->
+            <!--/>-->
 
             <TextView
                 android:id="@+id/toolbar_title"

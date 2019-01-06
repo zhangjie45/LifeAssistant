@@ -23,10 +23,19 @@
 
     <style name="toolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/toolbar_color</item>
-        <!--<item name="android:actionBarSize">46dp</item>-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionBarSize">46dp</item>
         <item name="android:homeAsUpIndicator">@drawable/item_back</item>
+        <item name="android:elevation">@dimen/design_appbar_elevation</item>
+        <item name="elevation">1dp</item>
 
-        <item name="android:elevation">5dp</item>
+        <item name="toolbarStyle">@style/toolbarStyle</item>
+    </style>
+
+    <style name="toolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
     </style>
 
     <style name="radiobutton_style">
