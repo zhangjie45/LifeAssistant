@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVOSCloud;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -41,6 +43,8 @@ public class BaseActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //初始化Leancloud
+        AVOSCloud.initialize(this, "07jspnPs0LVvAFhOgf36OrG7-gzGzoHsz", "NzRwCw50TJDziJy73QWqEvby");
         //  setContentView(getResViewId());
         //初始化右滑退出
         initSwipeBack();

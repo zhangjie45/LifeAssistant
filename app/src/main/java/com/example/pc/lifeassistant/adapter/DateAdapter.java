@@ -1,5 +1,6 @@
 package com.example.pc.lifeassistant.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
+import com.example.pc.lifeassistant.interface_.OnItemClickListener;
 import com.example.pc.lifeassistant.util.ItemTouchHelperAdapter;
 import com.example.pc.lifeassistant.bean.DateInfo;
 
@@ -28,6 +30,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
     LayoutInflater mInflater;
     List<DateInfo> mList = mData.addData();
     Context context;
+    OnItemClickListener onItemClickListener;
+
 
     public DateAdapter(Context context) {
         this.context = context;
@@ -41,9 +45,13 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
         return viewHolder;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         if (mList.get(position).getHome_day() < 5) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_remind));
         } else if (mList.get(position).getHome_day() < 10 && mList.get(position).getHome_day() >= 5) {
@@ -53,7 +61,22 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
         holder.home_day.setText(mList.get(position).getHome_day().toString());
         holder.home_date.setText(mList.get(position).getHome_date());
         holder.home_week.setText(mList.get(position).getHome_week());
+        if (onItemClickListener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(mList.get(position).getHome_title(), mList.get(position).getHome_date(), mList.get(position).getRemakes());
+                }
+            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick("", "", "");
+                    return false;
+                }
+            });
 
+        }
     }
 
 
@@ -67,6 +90,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
         Collections.swap(mList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
+
 
     @Override
     public void onItemDelete(int position) {

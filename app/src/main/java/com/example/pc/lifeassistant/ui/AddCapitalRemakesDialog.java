@@ -23,7 +23,7 @@ public class AddCapitalRemakesDialog extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_remakes);
+        setContentView(R.layout.activity_add_capital_remakes);
         initToolbar(R.id.tl_, R.id.toolbar_title, "备注", true);
         initSwipeBack();
         init();
