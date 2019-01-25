@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
+import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.interface_.OnItemClickListener;
 import com.example.pc.lifeassistant.util.ItemTouchHelperAdapter;
-import com.example.pc.lifeassistant.bean.DateInfo;
+import com.example.pc.lifeassistant.util.Utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,13 +32,14 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
 
     DateInfo mData = new DateInfo();
     LayoutInflater mInflater;
-    List<DateInfo> mList = mData.addData();
+    List<DateInfo> mList;
     Context context;
     OnItemClickListener onItemClickListener;
 
 
-    public DateAdapter(Context context) {
+    public DateAdapter(Context context, List<DateInfo> list) {
         this.context = context;
+        this.mList = list;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -52,20 +57,28 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        if (mList.get(position).getHome_day() < 5) {
+      //  Date date1 = new Date();
+        DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        Long home_day = Utils.CountDown(format1.format(new Date()), mList.get(position).getDate("home_date"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        final String date = sdf.format(mList.get(position).getDate("home_date"));
+
+        if (home_day < 5) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_remind));
-        } else if (mList.get(position).getHome_day() < 10 && mList.get(position).getHome_day() >= 5) {
+        } else if (home_day < 10 && home_day >= 5) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.event_agency));
         }
+
         holder.home_title.setText(mList.get(position).getHome_title());
-        holder.home_day.setText(mList.get(position).getHome_day().toString());
-        holder.home_date.setText(mList.get(position).getHome_date());
-        holder.home_week.setText(mList.get(position).getHome_week());
+        holder.home_date.setText(date);
+        holder.home_day.setText(home_day + "");
+            holder.home_week.setText("星期" + mList.get(position).getHome_week());
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(mList.get(position).getHome_title(), mList.get(position).getHome_date(), mList.get(position).getRemakes());
+                    onItemClickListener.onItemClick(mList.get(position).getHome_title(), date, mList.get(position).getRemakes());
                 }
             });
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

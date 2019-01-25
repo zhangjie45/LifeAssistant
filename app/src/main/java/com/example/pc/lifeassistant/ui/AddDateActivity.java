@@ -6,16 +6,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
+import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.util.BaseActivity;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by pc on 2018/11/4.
@@ -27,6 +33,11 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
     private TextInputEditText tiet_add_date_title;
     private EditText et_add_date;
     private Button btn_save;
+    //  Date date = new Date();
+    AVUser user = AVUser.getCurrentUser();
+    DateInfo dateInfo = new DateInfo();
+    private String data;
+    private String week;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +46,6 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
         initToolbar(R.id.tl_, R.id.toolbar_title, "日程添加", true);
         init();
         TIETextChange(tiet_add_date_title, til_add_date_title, 5);
-
         initSwipeBack();
 
     }
@@ -59,34 +69,35 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
                 date();
                 break;
             case R.id.btn_save:
-
+                save();
                 break;
         }
     }
 
-//    public void editTextChage() {
-//        tiet_add_date_title.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if (s.length() > 5) {
-//                    til_add_date_title.setErrorEnabled(true);
-//                    til_add_date_title.setError("字数超过5个");
-//                } else {
-//                    til_add_date_title.setErrorEnabled(false);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//    }
+    private void save() {
+        final AVObject event = new AVObject("Event");
+        event.put("home_week", week);
+        event.put("home_date", StrToDate(data));
+        event.put("home_title", "测试标题");
+        event.put("remakes", "测试备注");
+        event.put("user_id", user.getObjectId());
+        event.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    //存储成功
+                    //  Log.d("event_id----->", event.getObjectId());
+                    // dateInfo.setObjectId(event.getObjectId());
+                    Toast.makeText(AddDateActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(AddDateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // 失败的话，请检查网络环境以及 SDK 配置是否正确
+                }
+            }
+        });
+    }
+
 
     public void date() {
         Calendar c = Calendar.getInstance();
@@ -98,7 +109,10 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         int month = monthOfYear + 1;
-                        String data = year + "/" + month + "/" + dayOfMonth;
+                        data = year + "/" + month + "/" + dayOfMonth;
+                        Toast.makeText(AddDateActivity.this, getWeek(data), Toast.LENGTH_SHORT).show();
+                        week = getWeek(data);
+
                         if (getTimeCompareSize(StrToDate(data)) == 1) {
                             et_add_date.setText(year + "/" + month + "/" + dayOfMonth);
                         } else {

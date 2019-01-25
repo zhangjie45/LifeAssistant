@@ -2,17 +2,14 @@ package com.example.pc.lifeassistant.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
-import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
 
@@ -28,13 +25,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextInputEditText tiet_login_password;
     boolean login_flag = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //    testLeanCloud();
         setContentView(R.layout.activity_login);
         init();
-        //  PersistenceLogin();
+        PersistenceLogin();
         closeSwipeBack();
     }
 

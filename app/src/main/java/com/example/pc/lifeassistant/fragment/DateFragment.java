@@ -1,5 +1,7 @@
 package com.example.pc.lifeassistant.fragment;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,15 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVUser;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.DateAdapter;
+import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.interface_.OnItemClickListener;
 import com.example.pc.lifeassistant.ui.AddDateActivity;
 import com.example.pc.lifeassistant.ui.RemindOthersActivity;
+import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
 import com.example.pc.lifeassistant.util.DialogCustom;
 import com.example.pc.lifeassistant.util.DialogDelChange;
 import com.example.pc.lifeassistant.util.myItemTouchHelperCallBack;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by pc on 2018/10/30.
@@ -33,7 +41,70 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     private DialogDelChange.Builder del_change_builder;
     private DialogDelChange del_change_dialog;
 
-    public static final DateFragment newInstance(String name) {
+    private volatile List<DateInfo> events;
+    AVUser user = AVUser.getCurrentUser();
+
+
+    @SuppressLint("StaticFieldLeak")
+    private class showEvents extends AsyncTask<Void, Void, Void> {
+
+
+        //进入异步任务后被立即执行，一般操作UI提示用户。
+        @Override
+        protected void onPreExecute() {
+            ToastUtil("正在获取数据");
+            super.onPreExecute();
+        }
+
+        //执行较为费时的操作。
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Date date = new Date(System.currentTimeMillis());
+            events = AVService.findDate(user.getObjectId(), date);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            DateAdapter dateAdapter = new DateAdapter(getActivity(), events);
+            rv_date.setAdapter(dateAdapter);
+            ItemTouchHelper.Callback callback = new myItemTouchHelperCallBack(dateAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            touchHelper.attachToRecyclerView(rv_date);
+            dateAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(String title, String date, String remakes) {
+                    //   ToastUtil(position + "");
+                    showSingleButtonDialog(title, date, remakes, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            remake_dialog.dismiss();
+                        }
+                    });
+                }
+
+                @Override
+                public void onItemLongClick(String title, String date, String remakes) {
+                    showChangeDelDialog(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //  ToastUtil("点击了修改");
+                            del_change_dialog.dismiss();
+                        }
+                    }, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //  ToastUtil("点击了删除");
+                            del_change_dialog.dismiss();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+    public static DateFragment newInstance(String name) {
         DateFragment dateFragment = new DateFragment();
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
@@ -67,44 +138,15 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         rv_date = getActivity().findViewById(R.id.rv_fragment_date);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         rv_date.setLayoutManager(gridLayoutManager);
-        //绑定adapter
-        DateAdapter dateAdapter = new DateAdapter(getActivity());
-        rv_date.setAdapter(dateAdapter);
-        ItemTouchHelper.Callback callback = new myItemTouchHelperCallBack(dateAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(rv_date);
+        //启动异步操作
+        new showEvents().execute();
+
+
         tv_tb_add_date.setOnClickListener(this);
         tv_tb_add_date.setOnLongClickListener(this);
-        dateAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(String title, String date, String remakes) {
-                //   ToastUtil(position + "");
-                showSingleButtonDialog(title, date, remakes, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        remake_dialog.dismiss();
-                    }
-                });
-            }
 
-            @Override
-            public void onItemLongClick(String title, String date, String remakes) {
-                showChangeDelDialog(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //  ToastUtil("点击了修改");
-                        del_change_dialog.dismiss();
-                    }
-                }, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //  ToastUtil("点击了删除");
-                        del_change_dialog.dismiss();
-                    }
-                });
-            }
-        });
     }
+
 
     @Override
     public void onClick(View v) {

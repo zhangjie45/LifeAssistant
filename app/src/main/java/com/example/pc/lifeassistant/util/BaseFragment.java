@@ -20,4 +20,9 @@ public class BaseFragment extends Fragment {
         Intent intent = new Intent(getActivity(), activityName);
         startActivity(intent);
     }
+//    public void fragmentToActivity(Class activityName) {
+//        Intent intent = new Intent(getActivity(), activityName);
+//        startActivity(intent);
+//        getActivity().onBackPressed();
+//    }
 }
