@@ -74,6 +74,7 @@
                 android:text="备注：" />
 
             <EditText
+                android:id="@+id/et_add_remakes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_edittext_border"

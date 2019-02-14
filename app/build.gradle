@@ -38,6 +38,9 @@ dependencies {
     implementation 'com.github.florent37:materialtextfield:1.0.7'
     //时间轴库
     compile 'com.github.vipulasri:timelineview:1.0.6'
+    //下拉刷新库
+    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
+
     //圆形图片
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     // LeanCloud 基础包

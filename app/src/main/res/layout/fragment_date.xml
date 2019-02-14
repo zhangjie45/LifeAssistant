@@ -4,9 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_fragment_date"
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/date_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_fragment_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.baoyz.widget.PullRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

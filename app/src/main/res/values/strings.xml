@@ -9,5 +9,6 @@
     <string name="item_add">添加</string>
     <string name="btn_note">随手记</string>
     <string name="note_null">随手记为空,请添加内容吧。</string>
+    <string name="capital_remakes_null">记录花销更记录生活...</string>
     <string name="clear">清空</string>
 </resources>

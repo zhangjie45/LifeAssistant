@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
+import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.DateInfo;
 
 import java.text.ParseException;
@@ -40,10 +41,11 @@ public class BaseActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         //初始化Leancloud
         AVObject.registerSubclass(DateInfo.class);
+        AVObject.registerSubclass(CapitalInfo.class);
         AVOSCloud.initialize(this, "07jspnPs0LVvAFhOgf36OrG7-gzGzoHsz", "NzRwCw50TJDziJy73QWqEvby");
         //  setContentView(getResViewId());
-//调试日志
-        AVOSCloud.setDebugLogEnabled(true);
+        //调试日志
+        //AVOSCloud.setDebugLogEnabled(true);
         //初始化右滑退出
         initSwipeBack();
     }

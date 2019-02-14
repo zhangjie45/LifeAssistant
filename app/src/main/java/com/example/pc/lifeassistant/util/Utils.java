@@ -1,11 +1,16 @@
 package com.example.pc.lifeassistant.util;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by pc on 2018/12/2.
@@ -25,18 +30,37 @@ public class Utils {
         long days = 0;
         try {
             Date d1 = df.parse(current_time);
-            //   Date d2 = df.parse("2004-01-02 11:30:24");
             long diff = event_time.getTime() - d1.getTime();//这样得到的差值是微秒级别
             days = diff / (1000 * 60 * 60 * 24);
-            //     Log.e("倒计时结果-----》", days + "");
-//            long hours = (diff - days * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-//            long minutes = (diff - days * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60);
-//            System.out.println("" + days + "天" + hours + "小时" + minutes + "分");
+
 
         } catch (Exception e) {
             Log.e("倒计时计算出现错误：", e.getMessage());
         }
 
         return days;
+    }
+
+    //判断当前是否有网络
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    //GMT格式转换
+    public static String GMTtoStr(String GMTTime) throws ParseException {
+
+        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", Locale.ENGLISH);
+        Date date = sf.parse(GMTTime);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        return sdf.format(date);
     }
 }

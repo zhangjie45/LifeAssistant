@@ -12,7 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVCloudQueryResult;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CloudQueryCallback;
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.DateAdapter;
 import com.example.pc.lifeassistant.bean.DateInfo;
@@ -36,6 +41,8 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     private String name;
     private TextView tv_tb_add_date;
     private RecyclerView rv_date;
+    private PullRefreshLayout date_swipe_refresh;
+
     private DialogCustom.Builder remake_builder;
     private DialogCustom remake_dialog;
     private DialogDelChange.Builder del_change_builder;
@@ -52,7 +59,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         //进入异步任务后被立即执行，一般操作UI提示用户。
         @Override
         protected void onPreExecute() {
-            ToastUtil("正在获取数据");
+            //        ToastUtil("正在获取数据");
             super.onPreExecute();
         }
 
@@ -68,6 +75,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         protected void onPostExecute(Void result) {
             DateAdapter dateAdapter = new DateAdapter(getActivity(), events);
             rv_date.setAdapter(dateAdapter);
+            date_swipe_refresh.setRefreshing(false);
             ItemTouchHelper.Callback callback = new myItemTouchHelperCallBack(dateAdapter);
             ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             touchHelper.attachToRecyclerView(rv_date);
@@ -84,7 +92,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 @Override
-                public void onItemLongClick(String title, String date, String remakes) {
+                public void onItemLongClick(String title, String date, String remakes, final String OnjectID) {
                     showChangeDelDialog(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -95,6 +103,18 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
                         @Override
                         public void onClick(View v) {
                             //  ToastUtil("点击了删除");
+                            AVQuery.doCloudQueryInBackground("delete from Event where objectId='" + OnjectID + "'", new CloudQueryCallback<AVCloudQueryResult>() {
+                                @Override
+                                public void done(AVCloudQueryResult avCloudQueryResult, AVException e) {
+                                    // 如果 e 为空，说明保存成功
+                                    if (e == null) {
+                                        ToastUtil("删除成功");
+                                        new showEvents().execute();
+                                    } else {
+                                        ToastUtil("删除失败" + e.getMessage());
+                                    }
+                                }
+                            });
                             del_change_dialog.dismiss();
                         }
                     });
@@ -112,6 +132,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         return dateFragment;
 
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,17 +157,30 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         super.onActivityCreated(savedInstanceState);
         tv_tb_add_date = getActivity().findViewById(R.id.tv_tb_add);
         rv_date = getActivity().findViewById(R.id.rv_fragment_date);
+        date_swipe_refresh = getActivity().findViewById(R.id.date_swipe_refresh);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         rv_date.setLayoutManager(gridLayoutManager);
         //启动异步操作
         new showEvents().execute();
-
-
         tv_tb_add_date.setOnClickListener(this);
         tv_tb_add_date.setOnLongClickListener(this);
+        date_swipe_refresh.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new showEvents().execute();
+            }
+        });
 
     }
 
+
+    //当fragment被打开时重新请求
+    @Override
+    public void onStart() {
+        super.onStart();
+        new showEvents().execute();
+
+    }
 
     @Override
     public void onClick(View v) {

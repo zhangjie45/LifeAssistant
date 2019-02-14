@@ -1,5 +1,6 @@
 package com.example.pc.lifeassistant.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
+import com.example.pc.lifeassistant.util.Utils;
 
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -23,9 +26,8 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final int EMPTY_VIEW = 1;
     private final int INCOME_VIEW = 2;
     private final int EXPENDITURE_VIEW = 3;
-    CapitalInfo capitalInfo = new CapitalInfo();
     Context context;
-    List<CapitalInfo> mList = capitalInfo.addData();
+    List<CapitalInfo> mList;
 
 
     public CapitalAdapter(Context context) {
@@ -40,7 +42,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        Log.i("获取到的position---》", mList.get(position).getType().toString());
+        Log.i("获取到的position---》", mList.get(position).getType());
         if (mList.size() == 0) {
             return EMPTY_VIEW;
         } else if (mList.get(position) == null) {
@@ -75,22 +77,32 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof EmptyViewHolder) {
 
         } else if (holder instanceof InComeViewHolder) {
             InComeViewHolder viewHolder = (InComeViewHolder) holder;
-            viewHolder.type.setText(mList.get(position).getType());
-            viewHolder.time.setText(mList.get(position).getTime());
-            viewHolder.amount.setText(mList.get(position).getAmount() + "");
+
+            try {
+                viewHolder.type.setText(mList.get(position).getType());
+                viewHolder.time.setText(Utils.GMTtoStr(mList.get(position).getDate("time") + ""));
+                viewHolder.amount.setText(mList.get(position).getAmount());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
 
         } else if (holder instanceof ExpenditureViewHolder) {
             ExpenditureViewHolder viewHolder = (ExpenditureViewHolder) holder;
-            viewHolder.type.setText(mList.get(position).getType());
-            viewHolder.time.setText(mList.get(position).getTime());
-            viewHolder.amount.setText(mList.get(position).getAmount() + "");
-
+            try {
+                viewHolder.type.setText(mList.get(position).getType());
+                viewHolder.time.setText(Utils.GMTtoStr(mList.get(position).getDate("time") + ""));
+                viewHolder.amount.setText(mList.get(position).getAmount());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -99,6 +111,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         return mList.size();
+        //  return 0;
     }
 
 

@@ -57,7 +57,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-      //  Date date1 = new Date();
+        //  Date date1 = new Date();
         DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         Long home_day = Utils.CountDown(format1.format(new Date()), mList.get(position).getDate("home_date"));
@@ -73,7 +73,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
         holder.home_title.setText(mList.get(position).getHome_title());
         holder.home_date.setText(date);
         holder.home_day.setText(home_day + "");
-            holder.home_week.setText("星期" + mList.get(position).getHome_week());
+        holder.home_week.setText("星期" + mList.get(position).getHome_week());
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,7 +84,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    onItemClickListener.onItemLongClick("", "", "");
+                    onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId());
                     return false;
                 }
             });

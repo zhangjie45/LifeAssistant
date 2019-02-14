@@ -1,6 +1,8 @@
 package com.example.pc.lifeassistant.fragment;
 
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVUser;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.CapitalAdapter;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
+import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.ui.AddCapitalActivity;
+import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
 import com.example.pc.lifeassistant.util.ItemDecoration;
 
@@ -29,8 +34,33 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
     private TextView tv_tb_add_date;
     private RecyclerView recyclerView;
     CapitalAdapter adapter;
-    private List<CapitalInfo> mList = new ArrayList<>();
+    private volatile List<CapitalInfo> capitel;
+    AVUser user = AVUser.getCurrentUser();
 
+
+    // private List<CapitalInfo> mList = new ArrayList<>();
+    @SuppressLint("StaticFieldLeak")
+    private class showCapital extends AsyncTask<Void, Void, Void> {
+        //进入异步任务后被立即执行，一般操作UI提示用户。
+        @Override
+        protected void onPreExecute() {
+            //        ToastUtil("正在获取数据");
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            capitel = AVService.findCapital(user.getObjectId());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter = new CapitalAdapter(getActivity(), capitel);
+            recyclerView.clearAnimation();
+            recyclerView.setAdapter(adapter);
+        }
+    }
 
     public static final CapitalFragment newInstance(String name) {
         CapitalFragment capitalFragment = new CapitalFragment();
@@ -67,9 +97,8 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-            adapter = new CapitalAdapter(getActivity());
-        recyclerView.clearAnimation();
-        recyclerView.setAdapter(adapter);
+        //启动异步操作
+        new showCapital().execute();
 //        recyclerView.addItemDecoration(new ItemDecoration(getActivity()));
         tv_tb_add_date.setOnClickListener(this);
     }

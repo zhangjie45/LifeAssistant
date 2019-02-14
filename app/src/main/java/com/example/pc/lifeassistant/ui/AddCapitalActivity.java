@@ -19,15 +19,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.TypeMoneyAdapter;
 import com.example.pc.lifeassistant.bean.TypeMoneyInfo;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.KeyboardUtil;
 import com.example.pc.lifeassistant.util.MoneyKeyBoard;
+import com.example.pc.lifeassistant.util.SharedPreferencesHelper;
+import com.example.pc.lifeassistant.util.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.DatePickerDialog.OnDateSetListener;
@@ -54,16 +62,23 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
 
     private String[] expense = {"一般", "用餐", "交通", "服饰", "丽人"
             , "日用品", "娱乐", "食材", "零食", "酒水", "住房", "通讯", "家居", "人情", "学习", "医疗", "旅游", "数码"};
+
+    private String remakes;
     private TypeMoneyAdapter typeMoneyAdapter;
     private MoneyKeyBoard keyboard_view;
-
-
+    private boolean flag_date = false;
+    private boolean flag_income = true;
+    String incomeOrexpenditure = "收入";
     List<TypeMoneyInfo> list = new ArrayList<>();
-//    private LinearLayout ll_price_select;
-
-
+    //    private LinearLayout ll_price_select;
+    private SharedPreferencesHelper sharedPreferencesHelper;
+    String str;
+    AVUser user = AVUser.getCurrentUser();
     Double count;
     Double amount;
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+    Date curDate = new Date(System.currentTimeMillis());
+    private String data = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +91,8 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
 
 
     public void init() {
+        sharedPreferencesHelper = new SharedPreferencesHelper(AddCapitalActivity.this, "CapitalRemakes");
+
         LinearLayout tv_add_capital_date = (LinearLayout) findViewById(R.id.tv_add_capital_date);
         gv_type_money = (GridView) findViewById(R.id.gv_type_money);
         tv_income = (TextView) findViewById(R.id.tv_income);
@@ -88,6 +105,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         tv_add_capital_remakes = (TextView) findViewById(R.id.tv_add_capital_remakes);
         keyboard_view = (MoneyKeyBoard) findViewById(R.id.keyboard_view);
         et_amount = (EditText) findViewById(R.id.et);
+
         tv_income.setOnClickListener(this);
         tv_expense.setOnClickListener(this);
         tv_add_capital_plus.setOnClickListener(this);
@@ -105,6 +123,10 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                 tv_type_money_show.setText(list.get(position).getTv_type_money());
             }
         });
+
+        et_amount.setEnabled(false);
+        et_amount.setFocusable(false);
+        et_amount.setKeyListener(null);//重点
 
     }
 
@@ -128,6 +150,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_income:
+                flag_income = true;
                 tv_income.setTextColor(getResources().getColor(R.color.toolbar_color));
                 tv_expense.setTextColor(getResources().getColor(R.color.text_color_default));
                 list.clear();
@@ -137,6 +160,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
 
                 break;
             case R.id.tv_expense:
+                flag_income = false;
                 tv_expense.setTextColor(getResources().getColor(R.color.toolbar_color));
                 tv_income.setTextColor(getResources().getColor(R.color.text_color_default));
                 list.clear();
@@ -187,13 +211,18 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String str = null;
+
         if (data == null) {
-            //     Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+            str = sharedPreferencesHelper.getSharedPreference("capital_remakes_key", "").toString().trim();
+            Toast.makeText(this, "返回值为空", Toast.LENGTH_SHORT).show();
+            Log.e("缓存值：---->", str);
+            Toast.makeText(this, "缓存值为:" + str, Toast.LENGTH_SHORT).show();
+
         } else {
-            str = data.getStringExtra("data");
+            remakes = data.getStringExtra("data");
         }
         //   Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        //   remakes = data.getStringExtra("data");
     }
 
     public void keyBoard() {
@@ -202,14 +231,14 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         keyboardUtil.setOnOkClick(new KeyboardUtil.OnOkClick() {
             @Override
             public void onOkClick() {
-                Toast.makeText(AddCapitalActivity.this, "点击了确定", Toast.LENGTH_SHORT).show();
+                Conditionaljudgement();
             }
         });
         keyboardUtil.setOnCancelClick(new KeyboardUtil.onCancelClick() {
             @Override
             public void onCancellClick() {
                 et_amount.getText().clear();
-                //  Toast.makeText(AddCapitalActivity.this, "点击了关闭键盘按钮", Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -224,6 +253,70 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
 
     }
 
+    private void Conditionaljudgement() {
+
+        if (et_amount.getText().toString().equals("")) {
+            Toast.makeText(this, "金额为0", Toast.LENGTH_SHORT).show();
+        } else if (flag_date) {
+            Toast.makeText(this, "日期错误", Toast.LENGTH_SHORT).show();
+        } else if (data.equals("")) {
+            data = formatter.format(curDate);
+            if (flag_income) {
+                incomeOrexpenditure = "收入";
+            } else {
+                incomeOrexpenditure = "支出";
+            }
+            if (null == str || str.equals("")) {
+                remakes = "暂无备注";
+                addCapital();
+            } else {
+                remakes = str;
+                addCapital();
+            }
+        } else {
+            if (flag_income) {
+                incomeOrexpenditure = "收入";
+            } else {
+                incomeOrexpenditure = "支出";
+            }
+            if (null == str || str.equals("")) {
+                remakes = "暂无备注";
+                addCapital();
+            } else {
+                remakes = str;
+                addCapital();
+            }
+        }
+    }
+
+
+    private void addCapital() {
+        AVObject capital = new AVObject("Capital");
+        capital.put("amount", et_amount.getText().toString());
+        capital.put("time", StrToDate(data));
+        capital.put("remakes", remakes);
+        capital.put("type", tv_type_money_show.getText().toString());
+        capital.put("incomeOrexpenditure", incomeOrexpenditure);
+        capital.put("user_id", user.getObjectId());
+        capital.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    Toast.makeText(AddCapitalActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    sharedPreferencesHelper.remove("capital_remakes_key");
+                    finish();
+
+                } else {
+                    Toast.makeText(AddCapitalActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // 失败的话，请检查网络环境以及 SDK 配置是否正确
+                    if (Utils.isNetworkConnected(AddCapitalActivity.this)) {
+                        Toast.makeText(AddCapitalActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
     public void date() {
         Calendar c = Calendar.getInstance();
         // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
@@ -234,11 +327,13 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         int month = monthOfYear + 1;
-                        String data = year + "/" + month + "/" + dayOfMonth;
+                        data = year + "/" + month + "/" + dayOfMonth;
                         if (getTimeCompareSize(StrToDate(data)) > 1) {
+                            flag_date = false;
                             tv_add_capital_date_year.setText(year + "");
                             tv_add_capital_date_day.setText(month + "/" + dayOfMonth);
                         } else {
+                            flag_date = true;
                             Toast.makeText(AddCapitalActivity.this, "所选时间超出范围", Toast.LENGTH_SHORT).show();
 
                         }
@@ -250,4 +345,9 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sharedPreferencesHelper.remove("capital_remakes_key");
+    }
 }

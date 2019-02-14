@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
+import com.example.pc.lifeassistant.util.SharedPreferencesHelper;
 
 /**
  * Created by pc on 2018/12/16.
@@ -20,6 +21,8 @@ public class AddCapitalRemakesDialog extends BaseActivity {
     private TextView dialog_date;
     private Button dialog_btn_ok;
 
+    private SharedPreferencesHelper sharedPreferencesHelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +30,13 @@ public class AddCapitalRemakesDialog extends BaseActivity {
         initToolbar(R.id.tl_, R.id.toolbar_title, "备注", true);
         initSwipeBack();
         init();
+        ObtainContent();
     }
 
     public void init() {
+        sharedPreferencesHelper = new SharedPreferencesHelper(
+                AddCapitalRemakesDialog.this, "CapitalRemakes");
+
         dialog_content = (EditText) findViewById(R.id.dialog_content);
         dialog_date = (TextView) findViewById(R.id.dialog_date);
         dialog_btn_ok = (Button) findViewById(R.id.dialog_btn_ok);
@@ -43,5 +50,30 @@ public class AddCapitalRemakesDialog extends BaseActivity {
                 finish();
             }
         });
+
+    }
+
+    private void ObtainContent() {
+        String str = sharedPreferencesHelper.getSharedPreference("capital_remakes_key", "").toString();
+        if (str.equals("")) {
+            dialog_content.setHint(R.string.capital_remakes_null);
+        } else {
+            dialog_content.setText(str);
+
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sharedPreferencesHelper.put("capital_remakes_key", dialog_content.getText().toString());
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }
