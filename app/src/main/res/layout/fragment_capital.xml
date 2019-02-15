@@ -20,14 +20,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="11月收入" />
+                android:text="月收入" />
 
             <TextView
+                android:id="@+id/tv_monthly_income"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:text="3900.0元"
+                android:text="正在获取"
                 android:textColor="@color/event_agency" />
         </LinearLayout>
 
@@ -55,15 +56,16 @@
                 android:layout_gravity="right"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:text="11月支出" />
+                android:text="月支出" />
 
             <TextView
+                android:id="@+id/tv_monthly_expenditure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginEnd="5dp"
                 android:layout_marginTop="5dp"
-                android:text="534.0元"
+                android:text="正在获取"
                 android:textColor="@color/event_agency" />
         </LinearLayout>
     </LinearLayout>
