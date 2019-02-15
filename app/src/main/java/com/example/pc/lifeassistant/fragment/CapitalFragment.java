@@ -2,7 +2,6 @@ package com.example.pc.lifeassistant.fragment;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,15 +17,12 @@ import com.avos.avoscloud.AVUser;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.CapitalAdapter;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
-import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.ui.AddCapitalActivity;
 import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
-import com.example.pc.lifeassistant.util.ItemDecoration;
 import com.example.pc.lifeassistant.util.Utils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,7 +54,6 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         protected Void doInBackground(Void... voids) {
             capitel = AVService.findCapital(user.getObjectId());
             try {
-
                 capitel_income = AVService.incomeCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
                 capitel_expenditure = AVService.expenditureCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
             } catch (ParseException e) {
@@ -74,8 +69,8 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
             adapter = new CapitalAdapter(getActivity(), capitel);
             recyclerView.clearAnimation();
             recyclerView.setAdapter(adapter);
-            tv_monthly_incomel.setText(Utils.inComeCount(capitel_income) + "元");
-            tv_monthly_expenditure.setText(Utils.inComeCount(capitel_expenditure) + "元");
+            tv_monthly_incomel.setText(Utils.Count(capitel_income) + "元");
+            tv_monthly_expenditure.setText(Utils.Count(capitel_expenditure) + "元");
         }
     }
 
@@ -95,8 +90,6 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         if (args != null) {
             name = args.getString("name");
         }
-
-
     }
 
     @Nullable
@@ -136,9 +129,5 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
                 fragmentToActivity(AddCapitalActivity.class);
                 break;
         }
-
-
     }
-
-
 }

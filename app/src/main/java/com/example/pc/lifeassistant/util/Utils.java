@@ -89,11 +89,11 @@ public class Utils {
         return lastday + " 00:00:00";
     }
 
-    //计算当月的收入
-    public static double inComeCount(List<CapitalInfo> capitel_income) {
+    //计算当月的收入与住处
+    public static double Count(List<CapitalInfo> capital) {
         double amount = 0;
-        for (int i = 0; i < capitel_income.size(); i++) {
-            double num = Double.parseDouble(capitel_income.get(i).getAmount());
+        for (int i = 0; i < capital.size(); i++) {
+            double num = Double.parseDouble(capital.get(i).getAmount());
             amount += num;
         }
         return amount;
