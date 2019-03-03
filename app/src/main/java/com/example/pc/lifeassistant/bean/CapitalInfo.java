@@ -17,6 +17,7 @@ public class CapitalInfo extends AVObject {
     private Date time;
     private String type;
     private String amount;
+    private String reakes;
 
     public String getIncomeOrexpenditure() {
         return incomeOrexpenditure;
@@ -60,68 +61,13 @@ public class CapitalInfo extends AVObject {
         this.amount = amount;
     }
 
-    //    public List<CapitalInfo> addData() {
-//        List<CapitalInfo> mList = new ArrayList<>();
-//        String[] incomeOrexpenditure = {
-//                "支出",
-//                "支出",
-//                "支出",
-//                "收入",
-//                "收入",
-//                "支出",
-//                "支出",
-//                "支出",
-//                "收入",
-//                "收入",
-//        };
-//        String[] times = {
-//                "20181202",
-//                "20181202",
-//                "20181202",
-//                "20181202",
-//                "20181203",
-//                "20181207",
-//                "20181208",
-//                "20181208",
-//                "20181210",
-//                "20181212",
-//
-//        };
-//        String[] type = new String[]{
-//                "网购",
-//                "零食",
-//                "早饭",
-//                "红包",
-//                "工资",
-//                "午饭",
-//                "买菜",
-//                "水电费",
-//                "报销",
-//                "兼职",
-//
-//
-//        };
-//        int[] amount = new int[]{
-//                200,
-//                100,
-//                10,
-//                150,
-//                1500,
-//                20,
-//                78,
-//                126,
-//                1500,
-//                750,
-//        };
-//        for (int i = 0; i < times.length; i++) {
-//            CapitalInfo capitalInfo = new CapitalInfo();
-//         //   capitalInfo.setTime(times[i]);
-//            capitalInfo.setAmount(amount[i]);
-//            capitalInfo.setType(type[i]);
-//            capitalInfo.setIncomeOrexpenditure(incomeOrexpenditure[i]);
-//            mList.add(capitalInfo);
-//        }
-//        return mList;
-//    }
+    public String getReakes() {
+        return reakes;
+    }
+
+    public void setReakes(String reakes) {
+        this.reakes = reakes;
+    }
+
 }
 

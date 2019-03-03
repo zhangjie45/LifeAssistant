@@ -12,22 +12,26 @@ import android.widget.TextView;
 
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
+import com.example.pc.lifeassistant.interface_.OnItemClickListener;
+import com.example.pc.lifeassistant.util.ItemTouchHelperAdapter;
 import com.example.pc.lifeassistant.util.Utils;
 
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by pc on 2018/12/2.
  */
 
-public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
     private final int EMPTY_VIEW = 1;
     private final int INCOME_VIEW = 2;
     private final int EXPENDITURE_VIEW = 3;
     Context context;
     List<CapitalInfo> mList;
+    OnItemClickListener onItemClickListener;
 
 
     public CapitalAdapter(Context context) {
@@ -37,6 +41,10 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public CapitalAdapter(Context context, List<CapitalInfo> mList) {
         this.context = context;
         this.mList = mList;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
 
@@ -79,18 +87,36 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof EmptyViewHolder) {
 
         } else if (holder instanceof InComeViewHolder) {
             InComeViewHolder viewHolder = (InComeViewHolder) holder;
-
             try {
                 viewHolder.type.setText(mList.get(position).getType());
                 viewHolder.time.setText(Utils.GMTtoStr(mList.get(position).getDate("time") + ""));
                 viewHolder.amount.setText(mList.get(position).getAmount());
             } catch (ParseException e) {
                 e.printStackTrace();
+            }
+            if (onItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getReakes());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId(), position);
+                        return false;
+                    }
+                });
             }
 
 
@@ -103,6 +129,25 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            if (onItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getReakes());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId(), position);
+                        return false;
+                    }
+                });
+            }
         }
 
     }
@@ -112,6 +157,20 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return mList.size();
         //  return 0;
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDelete(int position) {
+        //移除数据
+        mList.remove(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
 

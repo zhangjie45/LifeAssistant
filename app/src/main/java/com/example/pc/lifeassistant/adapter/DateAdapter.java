@@ -84,7 +84,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId());
+                    onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId(), position);
+
                     return false;
                 }
             });
@@ -110,6 +111,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
         //移除数据
         mList.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

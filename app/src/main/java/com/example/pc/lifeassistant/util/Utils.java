@@ -45,6 +45,18 @@ public class Utils {
         return days;
     }
 
+    public static String nowDay() {
+        Calendar c = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat f = new SimpleDateFormat("yyyy年MM月dd日");
+        return f.format(c.getTime());
+    }
+
+    public static String now_Day() {
+        Calendar c = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        return f.format(c.getTime()) + " 00:00:00";
+    }
+
     //判断当前是否有网络
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
@@ -89,7 +101,7 @@ public class Utils {
         return lastday + " 00:00:00";
     }
 
-    //计算当月的收入与住处
+    //计算当月的收入与支出
     public static double Count(List<CapitalInfo> capital) {
         double amount = 0;
         for (int i = 0; i < capital.size(); i++) {

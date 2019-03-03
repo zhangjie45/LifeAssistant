@@ -13,13 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVCloudQueryResult;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CloudQueryCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.CapitalAdapter;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
+import com.example.pc.lifeassistant.interface_.OnItemClickListener;
 import com.example.pc.lifeassistant.ui.AddCapitalActivity;
 import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
+import com.example.pc.lifeassistant.util.DialogDelChange;
 import com.example.pc.lifeassistant.util.Utils;
 
 import java.text.ParseException;
@@ -39,6 +45,10 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
     private volatile List<CapitalInfo> capitel;
     private volatile List<CapitalInfo> capitel_income;
     private volatile List<CapitalInfo> capitel_expenditure;
+
+    private DialogDelChange.Builder del_change_builder;
+    private DialogDelChange del_change_dialog;
+
     AVUser user = AVUser.getCurrentUser();
 
     @SuppressLint("StaticFieldLeak")
@@ -71,6 +81,41 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
             recyclerView.setAdapter(adapter);
             tv_monthly_incomel.setText(Utils.Count(capitel_income) + "元");
             tv_monthly_expenditure.setText(Utils.Count(capitel_expenditure) + "元");
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(String title, String date, String remakes) {
+
+                }
+
+                @Override
+                public void onItemLongClick(String title, String date, String remakes, final String ObjectId, Integer position) {
+                    // ToastUtil("点击了删除" + ObjectId);
+                    showChangeDelDialog(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ToastUtil("点击了修改");
+                            del_change_dialog.dismiss();
+                        }
+                    }, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AVQuery.doCloudQueryInBackground("delete from Capital where objectId='" + ObjectId + "'", new CloudQueryCallback<AVCloudQueryResult>() {
+                                @Override
+                                public void done(AVCloudQueryResult avCloudQueryResult, AVException e) {
+                                    // 如果 e 为空，说明保存成功
+                                    if (e == null) {
+                                        ToastUtil("删除成功");
+                                        new showCapital().execute();
+                                    } else {
+                                        ToastUtil("删除失败" + e.getMessage());
+                                    }
+                                }
+                            });
+                            del_change_dialog.dismiss();
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -90,6 +135,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         if (args != null) {
             name = args.getString("name");
         }
+        del_change_builder = new DialogDelChange.Builder(this.getActivity());
     }
 
     @Nullable
@@ -129,5 +175,14 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
                 fragmentToActivity(AddCapitalActivity.class);
                 break;
         }
+    }
+
+    //展示自定义dialog
+    private void showChangeDelDialog(View.OnClickListener onChangeClickListener, View.OnClickListener onDeleteClickListener) {
+        del_change_dialog = del_change_builder.setMessage()
+                .setChangeButton(onChangeClickListener)
+                .setDeleteButton(onDeleteClickListener)
+                .DelChangeButtonDialog();
+        del_change_dialog.show();
     }
 }

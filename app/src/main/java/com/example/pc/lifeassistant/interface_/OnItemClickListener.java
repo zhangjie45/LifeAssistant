@@ -9,7 +9,7 @@ import android.view.View;
 public interface OnItemClickListener {
     void onItemClick(String title, String date, String remakes);
 
-    void onItemLongClick(String title, String date, String remakes, String ObjectId);
+    void onItemLongClick(String title, String date, String remakes, String ObjectId,Integer position);
 
 
 }

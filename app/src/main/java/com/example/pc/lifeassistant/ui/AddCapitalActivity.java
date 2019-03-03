@@ -50,6 +50,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     private TextView tv_income;
     private TextView tv_expense;
     private TextView tv_add_capital_plus;
+    private TextView tv_add_capital_reduce;
     private TextView tv_add_capital_sum;
     private TextView tv_add_capital_date_year;
     private TextView tv_add_capital_date_day;
@@ -68,9 +69,9 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     private MoneyKeyBoard keyboard_view;
     private boolean flag_date = false;
     private boolean flag_income = true;
+    private boolean flag_sum = true;//是否进行加法运算，加法运算：true;减法运算：false
     String incomeOrexpenditure = "收入";
     List<TypeMoneyInfo> list = new ArrayList<>();
-    //    private LinearLayout ll_price_select;
     private SharedPreferencesHelper sharedPreferencesHelper;
     String str;
     AVUser user = AVUser.getCurrentUser();
@@ -98,6 +99,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         tv_income = (TextView) findViewById(R.id.tv_income);
         tv_expense = (TextView) findViewById(R.id.tv_expense);
         tv_add_capital_plus = (TextView) findViewById(R.id.tv_add_capital_plus);
+        tv_add_capital_reduce = (TextView) findViewById(R.id.tv_add_capital_reduce);
         tv_add_capital_sum = (TextView) findViewById(R.id.tv_add_capital_sum);
         tv_type_money_show = (TextView) findViewById(R.id.tv_type_money_show);
         tv_add_capital_date_year = (TextView) findViewById(R.id.tv_add_capital_date_year);
@@ -109,6 +111,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         tv_income.setOnClickListener(this);
         tv_expense.setOnClickListener(this);
         tv_add_capital_plus.setOnClickListener(this);
+        tv_add_capital_reduce.setOnClickListener(this);
         tv_add_capital_sum.setOnClickListener(this);
         tv_add_capital_date.setOnClickListener(this);
         tv_add_capital_remakes.setOnClickListener(this);
@@ -175,11 +178,27 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                 } else {
                     amount = Double.parseDouble(money_plus);
                 }
+                flag_sum = true;
                 count = amount;
-//                Log.e("加数1", String.valueOf(amount));
                 et_amount.getText().clear();
                 tv_add_capital_plus.setVisibility(View.GONE);
                 tv_add_capital_sum.setVisibility(View.VISIBLE);
+                tv_add_capital_reduce.setVisibility(View.GONE);
+                break;
+
+            case R.id.tv_add_capital_reduce:
+                String money_reduce = et_amount.getText().toString();
+                if (null == money_reduce || money_reduce.equals("")) {
+                    amount = 0.0;
+                } else {
+                    amount = Double.parseDouble(money_reduce);
+                }
+                flag_sum = false;
+                count = amount;
+                et_amount.getText().clear();
+                tv_add_capital_plus.setVisibility(View.GONE);
+                tv_add_capital_sum.setVisibility(View.VISIBLE);
+                tv_add_capital_reduce.setVisibility(View.GONE);
                 break;
             case R.id.tv_add_capital_sum:
                 String money_sum = et_amount.getText().toString();
@@ -188,13 +207,15 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                 } else {
                     amount = Double.parseDouble(money_sum);
                 }
-                //  amount = Double.parseDouble(et_amount.getText().toString());
-//                Log.e("加数2", String.valueOf(amount));
-                count += amount;
-//                Log.e("求和结果", String.valueOf(count));
+                if (flag_sum) {
+                    count += amount;
+                } else {
+                    count -= amount;
+                }
                 et_amount.setText(String.valueOf(count));
                 tv_add_capital_sum.setVisibility(View.GONE);
                 tv_add_capital_plus.setVisibility(View.VISIBLE);
+                tv_add_capital_reduce.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_add_capital_date:
                 date();
@@ -214,15 +235,9 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
 
         if (data == null) {
             str = sharedPreferencesHelper.getSharedPreference("capital_remakes_key", "").toString().trim();
-            Toast.makeText(this, "返回值为空", Toast.LENGTH_SHORT).show();
-            Log.e("缓存值：---->", str);
-            Toast.makeText(this, "缓存值为:" + str, Toast.LENGTH_SHORT).show();
-
         } else {
             remakes = data.getStringExtra("data");
         }
-        //   Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-        //   remakes = data.getStringExtra("data");
     }
 
     public void keyBoard() {

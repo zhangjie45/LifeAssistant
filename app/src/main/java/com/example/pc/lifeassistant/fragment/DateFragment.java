@@ -73,7 +73,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
 
         @Override
         protected void onPostExecute(Void result) {
-            DateAdapter dateAdapter = new DateAdapter(getActivity(), events);
+            final DateAdapter dateAdapter = new DateAdapter(getActivity(), events);
             rv_date.setAdapter(dateAdapter);
             date_swipe_refresh.setRefreshing(false);
             ItemTouchHelper.Callback callback = new myItemTouchHelperCallBack(dateAdapter);
@@ -92,7 +92,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 @Override
-                public void onItemLongClick(String title, String date, String remakes, final String OnjectID) {
+                public void onItemLongClick(String title, String date, String remakes, final String OnjectID, final Integer Position) {
                     showChangeDelDialog(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -102,7 +102,6 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //  ToastUtil("点击了删除");
                             AVQuery.doCloudQueryInBackground("delete from Event where objectId='" + OnjectID + "'", new CloudQueryCallback<AVCloudQueryResult>() {
                                 @Override
                                 public void done(AVCloudQueryResult avCloudQueryResult, AVException e) {

@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets{
+        main{
+            jniLibs.srcDirs=['libs',"src/main/jniLibs"]
+        }
+    }
 }
 
 dependencies {
@@ -40,11 +45,16 @@ dependencies {
     compile 'com.github.vipulasri:timelineview:1.0.6'
     //下拉刷新库
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
-
+    //okHttp
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okio:okio:1.11.0'
+    //Gson
+    compile 'com.google.code.gson:gson:2.8.4'
     //圆形图片
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     // LeanCloud 基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v4.7.3'
     // LeanCloud 统计包
     compile 'cn.leancloud.android:avoscloud-statistics:v4.7.3'
+    implementation files('libs/BaiduLBS_Android.jar')
 }

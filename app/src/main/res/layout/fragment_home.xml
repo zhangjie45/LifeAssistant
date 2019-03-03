@@ -42,6 +42,7 @@
                         android:textSize="@dimen/font_size_default" />
 
                     <TextView
+                        android:id="@+id/tv_home_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
@@ -76,6 +77,7 @@
                             android:textSize="@dimen/font_size_default" />
 
                         <TextView
+                            android:id="@+id/tv_home_wea"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
@@ -83,7 +85,7 @@
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:text="晴"
+                            android:text="正在获取"
                             android:textColor="@color/white"
                             android:textSize="@dimen/font_size_default" />
                     </LinearLayout>
@@ -105,13 +107,14 @@
                             android:textSize="@dimen/font_size_default" />
 
                         <TextView
+                            android:id="@+id/tv_home_tem"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="15°"
+                            android:text="正在获取"
                             android:textColor="@color/white"
                             android:textSize="@dimen/font_size_default" />
                     </LinearLayout>
@@ -159,13 +162,14 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_home_event_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginBottom="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="3"
+                            android:text="0"
                             android:textColor="@color/event_agency"
                             android:textSize="25dp" />
 
@@ -219,13 +223,14 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_home_expenditure"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginBottom="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="780"
+                            android:text="0"
                             android:textColor="@color/event_agency"
                             android:textSize="25dp" />
 
@@ -251,6 +256,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             app:cardBackgroundColor="@color/home_bg_color"
             app:cardCornerRadius="5dp"

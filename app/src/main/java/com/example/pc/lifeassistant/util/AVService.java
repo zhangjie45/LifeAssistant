@@ -101,6 +101,20 @@ public class AVService {
         }
     }
 
+    //查询今日应完成事件数
+    public static int queryEventNum(String user_id, String nowDay) throws ParseException {
+        final AVQuery<DateInfo> userId = new AVQuery<>("Event");
+        userId.whereEqualTo("user_id", user_id);
+        final AVQuery<DateInfo> Day = new AVQuery<>("Event");
+        Day.whereEqualTo("home_date", getDateWithDateString(nowDay));
+        AVQuery<DateInfo> query = AVQuery.and(Arrays.asList(Day, userId));
+        try {
+            return query.count();
+        } catch (AVException e) {
+            return 0;
+        }
+    }
+
 //    public static boolean delDate(String objectId) {
 //        boolean del_flag = false;
 //

@@ -3,11 +3,16 @@ package com.example.pc.lifeassistant.ui;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.fragment.CapitalFragment;
 import com.example.pc.lifeassistant.fragment.DateFragment;
@@ -22,6 +27,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private CapitalFragment capitalFragment;
     private SettingFragment settingFragment;
     private TextView tv_tb_add;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,4 +117,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public void onTabReselected(int position) {
 
     }
+
+
 }

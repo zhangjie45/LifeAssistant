@@ -65,7 +65,7 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         et_content = et_note.getText().toString();
-        sharedPreferencesHelper.put(" ", et_content);
+        sharedPreferencesHelper.put("note_key", et_content);
 
     }
 }

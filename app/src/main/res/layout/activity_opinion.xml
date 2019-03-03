@@ -26,6 +26,7 @@
                 android:textColor="@color/text_color_default" />
 
             <EditText
+                android:id="@+id/et_opinion_contactInformation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -40,6 +41,7 @@
                 android:textColor="@color/text_color_default" />
 
             <EditText
+                android:id="@+id/et_opinion_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

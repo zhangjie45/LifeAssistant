@@ -166,15 +166,23 @@
                     android:textSize="@dimen/font_size_default" />
             </LinearLayout>
 
+
             <TextView
                 android:id="@+id/tv_add_capital_plus"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:background="@drawable/bg_keyboardview"
                 android:gravity="center"
                 android:text="＋" />
-
+            <TextView
+                android:id="@+id/tv_add_capital_reduce"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_keyboardview"
+                android:gravity="center"
+                android:text="-" />
             <TextView
                 android:id="@+id/tv_add_capital_sum"
                 android:layout_width="0dp"
