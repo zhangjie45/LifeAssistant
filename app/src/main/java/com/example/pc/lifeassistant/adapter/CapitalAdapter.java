@@ -104,7 +104,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         try {
-                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getReakes());
+                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getRemakes());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -113,7 +113,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId(), position);
+                        onItemClickListener.onItemLongClick("",mList.get(position).getType(), mList.get(position).getAmount(), mList.get(position).getDate("time"), mList.get(position).getRemakes(), mList.get(position).getObjectId(), mList.get(position).getIncomeOrexpenditure(), (Integer) mList.get(position).get("type_position"));
                         return false;
                     }
                 });
@@ -134,7 +134,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         try {
-                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getReakes());
+                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getRemakes());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -143,7 +143,8 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId(), position);
+                        onItemClickListener.onItemLongClick("",mList.get(position).getType(), mList.get(position).getAmount(), mList.get(position).getDate("time"), mList.get(position).getRemakes(), mList.get(position).getObjectId(), mList.get(position).getIncomeOrexpenditure(), (Integer) mList.get(position).get("type_position"));
+                        //  Log.i("adapter--->", mList.get(position).get("type_position") + "");
                         return false;
                     }
                 });

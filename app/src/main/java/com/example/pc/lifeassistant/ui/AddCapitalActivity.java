@@ -1,17 +1,13 @@
 package com.example.pc.lifeassistant.ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -25,6 +21,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.TypeMoneyAdapter;
+import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.TypeMoneyInfo;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.KeyboardUtil;
@@ -32,6 +29,11 @@ import com.example.pc.lifeassistant.util.MoneyKeyBoard;
 import com.example.pc.lifeassistant.util.SharedPreferencesHelper;
 import com.example.pc.lifeassistant.util.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,30 +72,42 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     private boolean flag_date = false;
     private boolean flag_income = true;
     private boolean flag_sum = true;//是否进行加法运算，加法运算：true;减法运算：false
+    private boolean flag_add = true;//是否进行修改操作，修改：false;添加：true
+
     String incomeOrexpenditure = "收入";
     List<TypeMoneyInfo> list = new ArrayList<>();
     private SharedPreferencesHelper sharedPreferencesHelper;
     String str;
     AVUser user = AVUser.getCurrentUser();
+    AVObject capital;
     Double count;
     Double amount;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
     Date curDate = new Date(System.currentTimeMillis());
     private String data = "";
+    private String ObjectId;
+    private int type_position;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_capital);
         initSwipeBack();
         init();
         keyBoard();
+
     }
 
+    @Override
+    protected void onStart() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
+        super.onStart();
+
+    }
 
     public void init() {
         sharedPreferencesHelper = new SharedPreferencesHelper(AddCapitalActivity.this, "CapitalRemakes");
-
         LinearLayout tv_add_capital_date = (LinearLayout) findViewById(R.id.tv_add_capital_date);
         gv_type_money = (GridView) findViewById(R.id.gv_type_money);
         tv_income = (TextView) findViewById(R.id.tv_income);
@@ -121,6 +135,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         gv_type_money.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                type_position = position;
                 typeMoneyAdapter.setSeclection(position);
                 typeMoneyAdapter.notifyDataSetChanged();
                 tv_type_money_show.setText(list.get(position).getTv_type_money());
@@ -130,6 +145,40 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
         et_amount.setEnabled(false);
         et_amount.setFocusable(false);
         et_amount.setKeyListener(null);//重点
+
+    }
+
+    //获取上个页面返回到修改信息
+    @SuppressLint("SetTextI18n")
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(CapitalInfo str) throws ParseException {
+        if (str != null) {
+            flag_add = false;
+            String date = Utils.GMTtoStr(str.getTime() + "");
+            ObjectId = str.getObjectId();
+            String type = str.getType();
+            type_position = str.getType_position();
+            String remakes = str.getRemakes();
+            String amount = str.getAmount();
+            String incomeOrexpenditure = str.getIncomeOrexpenditure();
+            flag_income = incomeOrexpenditure.equals("收入");
+            if (incomeOrexpenditure.equals("收入")) {
+                tv_income.performClick();
+                typeMoneyAdapter.setSeclection(type_position);
+            } else {
+                tv_expense.performClick();
+                typeMoneyAdapter.setSeclection(type_position);
+            }
+            et_amount.setText(amount);
+            tv_type_money_show.setText(type);
+            sharedPreferencesHelper.put("capital_remakes_key", remakes);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(str.getTime());
+            tv_add_capital_date_year.setText(calendar.get(Calendar.YEAR) + "");
+            tv_add_capital_date_day.setText((calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.DAY_OF_MONTH));
+        } else {
+            init();
+        }
 
     }
 
@@ -269,7 +318,6 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     }
 
     private void Conditionaljudgement() {
-
         if (et_amount.getText().toString().equals("")) {
             Toast.makeText(this, "金额为0", Toast.LENGTH_SHORT).show();
         } else if (flag_date) {
@@ -283,10 +331,16 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
             }
             if (null == str || str.equals("")) {
                 remakes = "暂无备注";
+
                 addCapital();
+
+
             } else {
                 remakes = str;
+
                 addCapital();
+
+
             }
         } else {
             if (flag_income) {
@@ -296,28 +350,40 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
             }
             if (null == str || str.equals("")) {
                 remakes = "暂无备注";
+
                 addCapital();
+
+
             } else {
                 remakes = str;
+
                 addCapital();
+
+
             }
         }
     }
 
 
     private void addCapital() {
-        AVObject capital = new AVObject("Capital");
+        if (flag_add) {
+            capital = new AVObject("Capital");
+        } else {
+            capital = AVObject.createWithoutData("Capital", ObjectId);
+        }
+
         capital.put("amount", et_amount.getText().toString());
         capital.put("time", StrToDate(data));
         capital.put("remakes", remakes);
         capital.put("type", tv_type_money_show.getText().toString());
+        capital.put("type_position", type_position);
         capital.put("incomeOrexpenditure", incomeOrexpenditure);
         capital.put("user_id", user.getObjectId());
         capital.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
                 if (e == null) {
-                    Toast.makeText(AddCapitalActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddCapitalActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                     sharedPreferencesHelper.remove("capital_remakes_key");
                     finish();
 
@@ -364,5 +430,11 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         sharedPreferencesHelper.remove("capital_remakes_key");
+        //移除所有的粘性事件
+        EventBus.getDefault().removeAllStickyEvents();
+        //解除注册
+        EventBus.getDefault().unregister(this);
     }
+
+
 }

@@ -50,6 +50,8 @@ dependencies {
     compile 'com.squareup.okio:okio:1.11.0'
     //Gson
     compile 'com.google.code.gson:gson:2.8.4'
+    //eventbus
+    compile 'org.greenrobot:eventbus:3.0.0'
     //圆形图片
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     // LeanCloud 基础包

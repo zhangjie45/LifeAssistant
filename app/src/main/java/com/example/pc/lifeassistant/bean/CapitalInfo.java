@@ -16,8 +16,11 @@ public class CapitalInfo extends AVObject {
     private String incomeOrexpenditure;
     private Date time;
     private String type;
+    private int type_position;
+
+
     private String amount;
-    private String reakes;
+    private String remakes;
 
     public String getIncomeOrexpenditure() {
         return incomeOrexpenditure;
@@ -53,6 +56,14 @@ public class CapitalInfo extends AVObject {
         this.type = type;
     }
 
+    public int getType_position() {
+        return type_position;
+    }
+
+    public void setType_position(int type_position) {
+        this.type_position = type_position;
+    }
+
     public String getAmount() {
         return amount;
     }
@@ -61,12 +72,12 @@ public class CapitalInfo extends AVObject {
         this.amount = amount;
     }
 
-    public String getReakes() {
-        return reakes;
+    public String getRemakes() {
+        return remakes;
     }
 
-    public void setReakes(String reakes) {
-        this.reakes = reakes;
+    public void setRemakes(String remakes) {
+        this.remakes = remakes;
     }
 
 }

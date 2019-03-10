@@ -84,8 +84,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> im
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    onItemClickListener.onItemLongClick("", "", "", mList.get(position).getObjectId(), position);
-
+                    onItemClickListener.onItemLongClick(mList.get(position).getHome_week(), mList.get(position).getHome_title(), "", mList.get(position).getDate("home_date"), mList.get(position).getRemakes(), mList.get(position).getObjectId(), "", 0);
                     return false;
                 }
             });

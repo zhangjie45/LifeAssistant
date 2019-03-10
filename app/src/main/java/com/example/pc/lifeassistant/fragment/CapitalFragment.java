@@ -28,7 +28,10 @@ import com.example.pc.lifeassistant.util.BaseFragment;
 import com.example.pc.lifeassistant.util.DialogDelChange;
 import com.example.pc.lifeassistant.util.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,6 +54,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
 
     AVUser user = AVUser.getCurrentUser();
 
+
     @SuppressLint("StaticFieldLeak")
     private class showCapital extends AsyncTask<Void, Void, Void> {
         //进入异步任务后被立即执行，一般操作UI提示用户。
@@ -62,8 +66,8 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
 
         @Override
         protected Void doInBackground(Void... voids) {
-            capitel = AVService.findCapital(user.getObjectId());
             try {
+                capitel = AVService.findCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
                 capitel_income = AVService.incomeCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
                 capitel_expenditure = AVService.expenditureCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
             } catch (ParseException e) {
@@ -87,13 +91,24 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
 
                 }
 
+
                 @Override
-                public void onItemLongClick(String title, String date, String remakes, final String ObjectId, Integer position) {
+                public void onItemLongClick(String week,final String title, final String amount, final Date date, final String remakes, final String ObjectId, final String incomeOrexpenditure, final Integer type_position) {
                     // ToastUtil("点击了删除" + ObjectId);
                     showChangeDelDialog(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ToastUtil("点击了修改");
+                            fragmentToActivity(AddCapitalActivity.class);
+                            CapitalInfo capitalInfo = new CapitalInfo();
+                            capitalInfo.setType(title);
+                            capitalInfo.setType_position(type_position);
+                            capitalInfo.setObjectId(ObjectId);
+                            capitalInfo.setTime(date);
+                            capitalInfo.setIncomeOrexpenditure(incomeOrexpenditure);
+                            capitalInfo.setRemakes(remakes);
+                            capitalInfo.setAmount(amount);
+
+                            EventBus.getDefault().postSticky(capitalInfo);
                             del_change_dialog.dismiss();
                         }
                     }, new View.OnClickListener() {
@@ -128,6 +143,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
 
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +152,9 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
             name = args.getString("name");
         }
         del_change_builder = new DialogDelChange.Builder(this.getActivity());
+
     }
+
 
     @Nullable
     @Override
@@ -185,4 +203,6 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
                 .DelChangeButtonDialog();
         del_change_dialog.show();
     }
+
+
 }

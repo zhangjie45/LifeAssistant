@@ -2,6 +2,8 @@ package com.example.pc.lifeassistant.interface_;
 
 import android.view.View;
 
+import java.util.Date;
+
 /**
  * Created by pc on 2019/1/6.
  */
@@ -9,7 +11,7 @@ import android.view.View;
 public interface OnItemClickListener {
     void onItemClick(String title, String date, String remakes);
 
-    void onItemLongClick(String title, String date, String remakes, String ObjectId,Integer position);
+    void onItemLongClick(String week, String title, String amount, Date date, String remakes, String incomeOrexpenditure, String ObjectId, Integer type_position);
 
 
 }

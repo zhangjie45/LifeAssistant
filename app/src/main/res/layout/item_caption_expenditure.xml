@@ -45,6 +45,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
+
         <android.support.v7.widget.CardView
             android:id="@+id/item_my_recyclerview"
             android:layout_width="match_parent"
@@ -81,7 +82,8 @@
                     <TextView
                         android:id="@+id/capital_type"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="8dp"
                         android:text="吃饭"
                         android:textColor="@android:color/white"
@@ -110,9 +112,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="8dp"
-                        android:textSize="10sp"
+                        android:textColor="@android:color/white"
 
-                        android:textColor="@android:color/white" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
                 <LinearLayout

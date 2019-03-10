@@ -49,8 +49,9 @@
 
                     <TextView
                         android:id="@+id/capital_type"
+                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="吃饭"
                         android:textColor="@android:color/white"

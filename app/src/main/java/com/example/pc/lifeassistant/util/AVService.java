@@ -52,15 +52,18 @@ public class AVService {
         }
     }
 
-    public static List<CapitalInfo> findCapital(String user_id) {
+    public static List<CapitalInfo> findCapital(String user_id, String firstDay, String lastDay) throws ParseException {
 
         final AVQuery<CapitalInfo> userID = new AVQuery<>("Capital");
         userID.whereEqualTo("user_id", user_id);
 
         AVQuery<CapitalInfo> query = AVQuery.and(Collections.singletonList(userID));
+        final AVQuery<CapitalInfo> startDateQuery = new AVQuery<>("Capital");
+        startDateQuery.whereGreaterThanOrEqualTo("time", getDateWithDateString(firstDay));
+        final AVQuery<CapitalInfo> endDateQuery = new AVQuery<>("Capital");
+        endDateQuery.whereLessThan("time", getDateWithDateString(lastDay));
         query.orderByDescending("time");
         try {
-
             return query.find();
         } catch (AVException e) {
             return Collections.emptyList();

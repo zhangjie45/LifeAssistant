@@ -30,6 +30,8 @@ import com.example.pc.lifeassistant.util.DialogCustom;
 import com.example.pc.lifeassistant.util.DialogDelChange;
 import com.example.pc.lifeassistant.util.myItemTouchHelperCallBack;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Date;
 import java.util.List;
 
@@ -91,18 +93,26 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
                     });
                 }
 
+
                 @Override
-                public void onItemLongClick(String title, String date, String remakes, final String OnjectID, final Integer Position) {
+                public void onItemLongClick(final String week, final String title, String amount, final Date date, final String remakes, final String ObjectId, String incomeOrexpenditure, Integer type_position) {
                     showChangeDelDialog(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //  ToastUtil("点击了修改");
+                            fragmentToActivity(AddDateActivity.class);
+                            DateInfo dateInfo = new DateInfo();
+                            dateInfo.setObjectId(ObjectId);
+                            dateInfo.setRemakes(remakes);
+                            dateInfo.setHome_date(date);
+                            dateInfo.setHome_title(title);
+                            dateInfo.setHome_week(week);
+                            EventBus.getDefault().postSticky(dateInfo);
                             del_change_dialog.dismiss();
                         }
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AVQuery.doCloudQueryInBackground("delete from Event where objectId='" + OnjectID + "'", new CloudQueryCallback<AVCloudQueryResult>() {
+                            AVQuery.doCloudQueryInBackground("delete from Event where objectId='" + ObjectId + "'", new CloudQueryCallback<AVCloudQueryResult>() {
                                 @Override
                                 public void done(AVCloudQueryResult avCloudQueryResult, AVException e) {
                                     // 如果 e 为空，说明保存成功

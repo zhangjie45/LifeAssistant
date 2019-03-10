@@ -69,6 +69,7 @@ public class TypeMoneyAdapter extends BaseAdapter {
         }
         //根据点击的Item当前状态设置背景
         if (clickTemp == position) {
+
             holder.tv_type_money.setTextColor(Color.parseColor("#15b4fe"));
             holder.tv_type_money.setBackgroundResource(R.drawable.tv_type_money_select);
         } else {

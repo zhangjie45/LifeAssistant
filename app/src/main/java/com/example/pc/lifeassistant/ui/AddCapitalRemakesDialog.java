@@ -36,7 +36,6 @@ public class AddCapitalRemakesDialog extends BaseActivity {
     public void init() {
         sharedPreferencesHelper = new SharedPreferencesHelper(
                 AddCapitalRemakesDialog.this, "CapitalRemakes");
-
         dialog_content = (EditText) findViewById(R.id.dialog_content);
         dialog_date = (TextView) findViewById(R.id.dialog_date);
         dialog_btn_ok = (Button) findViewById(R.id.dialog_btn_ok);
@@ -55,13 +54,11 @@ public class AddCapitalRemakesDialog extends BaseActivity {
 
     private void ObtainContent() {
         String str = sharedPreferencesHelper.getSharedPreference("capital_remakes_key", "").toString();
-        if (str.equals("")) {
+        if (str.equals("") || str.equals("暂无备注")) {
             dialog_content.setHint(R.string.capital_remakes_null);
         } else {
             dialog_content.setText(str);
-
         }
-
     }
 
     @Override

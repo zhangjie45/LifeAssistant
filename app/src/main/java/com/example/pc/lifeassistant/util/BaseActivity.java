@@ -133,6 +133,15 @@ public class BaseActivity extends SwipeBackActivity {
     }
 
     /*
+    日期转字符串
+
+     */
+    public static String DateToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
+    /*
     判断日期是否超过今天 1：超过 2：等于 3：没超过
      */
     public static int getTimeCompareSize(Date selectDate) {

@@ -17,9 +17,15 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
+import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.ParseException;
 import java.util.Calendar;
 
 /**
@@ -33,11 +39,22 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
     private EditText et_add_remakes;
     private EditText et_add_date;
     private Button btn_save;
-    private String data;
+    private String date;
     private String week;
-    String remakers;
+    private String remakers;
+    private String ObjectId;
+    private boolean flag_add = true;//是否进行修改操作，修改：false;添加：true
+    AVObject event;
 
     AVUser user = AVUser.getCurrentUser();
+
+    @Override
+    protected void onStart() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
+        super.onStart();
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +65,24 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
         TIETextChange(tiet_add_date_title, til_add_date_title, 5);
         initSwipeBack();
 
+    }
+
+    //获取上个页面返回到修改信息
+    @SuppressLint("SetTextI18n")
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(DateInfo str) throws ParseException {
+        if (str != null) {
+            String title = str.getHome_title();
+            date = Utils.GMTtoStr(str.getHome_date() + "");
+            String remakes = str.getRemakes();
+            week = str.getHome_week();
+            ObjectId = str.getObjectId();
+            flag_add = false;
+            tiet_add_date_title.setText(title);
+            et_add_date.setText(date);
+            et_add_remakes.setText(remakes);
+            initToolbar(R.id.tl_, R.id.toolbar_title, "日程修改", true);
+        }
     }
 
     private void init() {
@@ -82,7 +117,7 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
             Toast.makeText(this, "标题不能为空", Toast.LENGTH_SHORT).show();
         } else if (tiet_add_date_title.getText().toString().length() > 5) {
             Toast.makeText(this, "标题字数不能超过5个", Toast.LENGTH_SHORT).show();
-        } else if (StrToDate(data) == null) {
+        } else if (StrToDate(date) == null) {
             Toast.makeText(this, "请选择日期", Toast.LENGTH_SHORT).show();
         } else if (et_add_date.getText().toString().equals("所选日期不能小于今天")) {
             Toast.makeText(this, "所选日期不能小于今天", Toast.LENGTH_SHORT).show();
@@ -91,15 +126,18 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
             addEvent();
         } else {
             addEvent();
-
         }
-
     }
 
+
     public void addEvent() {
-        final AVObject event = new AVObject("Event");
+        if (flag_add) {
+            event = new AVObject("Event");
+        } else {
+            event = AVObject.createWithoutData("Event", ObjectId);
+        }
         event.put("home_week", week);
-        event.put("home_date", StrToDate(data));
+        event.put("home_date", StrToDate(date));
         event.put("home_title", tiet_add_date_title.getText().toString());
         event.put("remakes", remakers);
         event.put("user_id", user.getObjectId());
@@ -107,7 +145,7 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void done(AVException e) {
                 if (e == null) {
-                    Toast.makeText(AddDateActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddDateActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(AddDateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -131,10 +169,10 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         int month = monthOfYear + 1;
-                        data = year + "/" + month + "/" + dayOfMonth;
+                        date = year + "/" + month + "/" + dayOfMonth;
                         //    Toast.makeText(AddDateActivity.this, getWeek(data), Toast.LENGTH_SHORT).show();
-                        week = getWeek(data);
-                        if (getTimeCompareSize(StrToDate(data)) == 1) {
+                        week = getWeek(date);
+                        if (getTimeCompareSize(StrToDate(date)) == 1) {
                             et_add_date.setText(year + "/" + month + "/" + dayOfMonth);
                         } else {
                             et_add_date.setText("所选日期不能小于今天");
@@ -147,5 +185,12 @@ public class AddDateActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //移除所有的粘性事件
+        EventBus.getDefault().removeAllStickyEvents();
+        //解除注册
+        EventBus.getDefault().unregister(this);
+    }
 }
