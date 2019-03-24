@@ -3,9 +3,7 @@ package com.example.pc.lifeassistant.bean;
 import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by pc on 2018/12/2.

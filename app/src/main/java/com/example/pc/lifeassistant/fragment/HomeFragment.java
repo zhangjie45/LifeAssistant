@@ -22,7 +22,9 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
+import com.example.pc.lifeassistant.bean.RemindInfo;
 import com.example.pc.lifeassistant.bean.WeatherData;
+import com.example.pc.lifeassistant.ui.LoginActivity;
 import com.example.pc.lifeassistant.ui.NoteActivity;
 import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
@@ -64,27 +66,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public LocationClient mLocationClient = null;
     private MyLocationListener myListener = new MyLocationListener();
     private volatile List<CapitalInfo> capitel_expenditure;
+    private volatile List<RemindInfo> remind;
 
     @SuppressLint({"HandlerLeak", "StaticFieldLeak"})
-//    private Handler handler_location = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case MSG_DOWN_FAIL:
-//                    //  ToastUtil();
-//                    // mTipTv.setText("download fial");
-//                    break;
-//                case MSG_DOWN_SUCCESS:
-//                    //      ToastUtil(msg.obj.toString());
-//                    break;
-//                case MSG_DOWN_START:
-//                    //  mTipTv.setText("download start");
-//                    break;
-//            }
-//
-//            super.handleMessage(msg);
-//        }
-//    };
     private class showNum extends AsyncTask<Void, Void, Void> {
 
         //进入异步任务后被立即执行，一般操作UI提示用户。
@@ -97,8 +81,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
+                if (user.getObjectId() == null) {
+                    fragmentToActivity(LoginActivity.class);
+                }
                 num = AVService.queryEventNum(user.getObjectId(), Utils.now_Day());
                 capitel_expenditure = AVService.expenditureCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
+                remind = AVService.queryRemind(user.getUsername(), "Tom", Utils.now_Day());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -109,6 +97,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         protected void onPostExecute(Void result) {
             tv_home_event_num.setText(num + "");
             tv_home_expenditure.setText(Utils.Count(capitel_expenditure) + "");
+            for (int i = 0; i < remind.size(); i++) {
+                //  Log.i("remind内容："+ remind.get(i).getContent());
+            }
+            // Log.i("remind内容："+remind.get[]);
+            ToastUtil(remind.size() + "");
         }
     }
 

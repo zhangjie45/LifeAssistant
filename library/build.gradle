@@ -14,6 +14,7 @@ android {
 
 dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    compile 'cn.leancloud.android:avoscloud-sdk:v4.7.3'
 }
 
 version="1.3.0"

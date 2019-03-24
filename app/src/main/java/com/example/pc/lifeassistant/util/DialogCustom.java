@@ -62,12 +62,6 @@ public class DialogCustom extends Dialog {
 
         public DialogCustom createSingleButtonDialog() {
             layout.findViewById(R.id.img_dialog_custom_back).setOnClickListener(singleButtonClickListener);
-            //如果传入的按钮文字为空，则使用默认的“返回”
-//            if (singleButtonText != null) {
-//                ((Button) layout.findViewById(R.id.singleButton)).setText(singleButtonText);
-//            } else {
-//                ((Button) layout.findViewById(R.id.singleButton)).setText("返回");
-//            }
             create();
             return dialogCustom;
 
@@ -103,6 +97,6 @@ public class DialogCustom extends Dialog {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().getDecorView().setPadding(140, 0, 140, 0);
         getWindow().setAttributes(layoutParams);
-
+        getWindow().setWindowAnimations(R.style.dialogAnimation);
     }
 }

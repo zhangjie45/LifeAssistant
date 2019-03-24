@@ -78,7 +78,7 @@ public class DialogDelChange extends Dialog {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().getDecorView().setPadding(0, 0, 0, 10);
         getWindow().setAttributes(layoutParams);
-          getWindow().setWindowAnimations(R.style.dialogAnimation);
+        getWindow().setWindowAnimations(R.style.dialogAnimation);
 
     }
 }

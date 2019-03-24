@@ -46,7 +46,7 @@ public class AddCapitalRemakesDialog extends BaseActivity {
                 intent.putExtra("data", dialog_content.getText().toString().trim());
                 setResult(3, intent);
                 //关闭当前activity
-                finish();
+                AddCapitalRemakesDialog.this.finish();
             }
         });
 

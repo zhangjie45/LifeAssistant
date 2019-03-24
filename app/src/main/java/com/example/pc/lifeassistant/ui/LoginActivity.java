@@ -59,7 +59,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     AVUser.logInInBackground(user, pw, new LogInCallback<AVUser>() {
                         @Override
                         public void done(AVUser avUser, AVException e) {
-                            skipAnotherActivity(LoginActivity.this, MainActivity.class);
+                            if (e != null) {
+                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                skipAnotherActivity(LoginActivity.this, MainActivity.class);
+
+                            }
+
                         }
                     });
                 }
@@ -84,20 +90,4 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-//    public void testLeanCloud() {
-//        // 测试 SDK 是否正常工作的代码
-//        AVObject testObject = new AVObject("TestObject");
-//        testObject.put("words", "Hello World!");
-//        testObject.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(AVException e) {
-//                if (e == null) {
-//                    Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();
-//                    // Log.d("saved", "success!");
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "error" + e.toString(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//    }
 }

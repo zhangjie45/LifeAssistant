@@ -20,72 +20,96 @@
             android:layout_margin="5dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_remind_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="12"
-                app:counterOverflowTextAppearance="@style/counterOverflowTextAppearance"
-                app:errorEnabled="true"
-                app:errorTextAppearance="@style/errorAppearance"
-                app:hintTextAppearance="@style/hintAppearance">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/tiet_remind_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="请输入TA的id：" />
-            </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="内容：" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_remind_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-10dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="30"
-                app:counterOverflowTextAppearance="@style/counterOverflowTextAppearance"
-                app:errorEnabled="true"
-                app:errorTextAppearance="@style/errorAppearance"
-                app:hintTextAppearance="@style/hintAppearance">
-
-                <EditText
-                    android:id="@+id/et_remind_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/style_edittext_border"
-                    android:gravity="top"
-                    android:minLines="10"
-                    android:padding="5dp" />
-            </android.support.design.widget.TextInputLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_remind_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:counterOverflowTextAppearance="@style/counterOverflowTextAppearance"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/errorAppearance"
+                    app:hintTextAppearance="@style/hintAppearance">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tiet_remind_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="请输入TA的账号" />
+                </android.support.design.widget.TextInputLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_remind_query"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/icon_query" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_remind_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="显示时间：" />
+                    android:text="内容：" />
 
-                <EditText
-                    android:id="@+id/et_remind_date"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_remind_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:hint="请选择日期"
-                    android:padding="5dp"
-                    android:textColor="@color/event_agency"
-                    android:textSize="@dimen/font_size_14" />
+                    android:layout_marginTop="-10dp"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="30"
+                    app:counterOverflowTextAppearance="@style/counterOverflowTextAppearance"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/errorAppearance"
+                    app:hintTextAppearance="@style/hintAppearance">
+
+                    <EditText
+                        android:id="@+id/et_remind_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_edittext_border"
+                        android:gravity="top"
+                        android:minLines="10"
+                        android:padding="5dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="显示时间：" />
+
+                    <EditText
+                        android:id="@+id/et_remind_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="请选择日期"
+                        android:padding="5dp"
+                        android:textColor="@color/event_agency"
+                        android:textSize="@dimen/font_size_14" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -97,7 +121,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_remind_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.DateInfo;
+import com.example.pc.lifeassistant.bean.RemindInfo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,11 +43,10 @@ public class AVService {
         AVQuery<DateInfo> query = AVQuery.and(Arrays.asList(creatorID, eventDate));
         query.setCachePolicy(AVQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.setMaxCacheAge(24 * 3600 * 1000); //设置为一天，单位毫秒
-        boolean isInCache = query.hasCachedResult();
         query.orderByAscending("home_date");
+
         try {
 
-            Log.e("缓存结果", isInCache + "");
             return query.find();
         } catch (AVException e) {
             return Collections.emptyList();
@@ -118,10 +119,33 @@ public class AVService {
         }
     }
 
-//    public static boolean delDate(String objectId) {
-//        boolean del_flag = false;
-//
-//        return del_flag;
-//    }
+    //查询账号是否可被提醒
+    public static List<AVUser> queryAccount(String remindAccount) throws ParseException, AVException {
+        final AVQuery<AVUser> user = new AVQuery<>("_User");
+        user.whereEqualTo("username", remindAccount);
+        AVQuery<AVUser> query = AVQuery.and(Arrays.asList(user));
+        try {
+            return query.find();
+        } catch (AVException e) {
+            return Collections.emptyList();
+        }
+    }
+
+    //查询今日提醒事件
+    public static List<RemindInfo> queryRemind(String user_id, String remind_id, String date) throws ParseException {
+        final AVQuery<RemindInfo> reminders = new AVQuery<>("Remind");
+        reminders.whereEqualTo("reminders", user_id);
+        final AVQuery<RemindInfo> addedpersonaccount = new AVQuery<>("Remind");
+        addedpersonaccount.whereEqualTo("addedpersonaccount", remind_id);
+        final AVQuery<RemindInfo> Day = new AVQuery<>("Remind");
+        Day.whereEqualTo("date", getDateWithDateString(date));
+        AVQuery<RemindInfo> query = AVQuery.and(Arrays.asList(reminders, addedpersonaccount, Day));
+        try {
+            return query.find();
+        } catch (AVException e) {
+            return Collections.emptyList();
+        }
+
+    }
 
 }

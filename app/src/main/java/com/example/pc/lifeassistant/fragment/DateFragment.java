@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,10 @@ import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
 import com.example.pc.lifeassistant.util.DialogCustom;
 import com.example.pc.lifeassistant.util.DialogDelChange;
+import com.example.pc.lifeassistant.util.SharedPreferencesHelper;
 import com.example.pc.lifeassistant.util.myItemTouchHelperCallBack;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -49,7 +53,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     private DialogCustom remake_dialog;
     private DialogDelChange.Builder del_change_builder;
     private DialogDelChange del_change_dialog;
-
+    SharedPreferencesHelper sharedPreferencesHelper;
     private volatile List<DateInfo> events;
     AVUser user = AVUser.getCurrentUser();
 
@@ -70,6 +74,22 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         protected Void doInBackground(Void... voids) {
             Date date = new Date(System.currentTimeMillis());
             events = AVService.findDate(user.getObjectId(), date);
+//
+//            String date_events_str = sharedPreferencesHelper.getSharedPreference("date_events", "").toString();
+//            if (date_events_str.length() == 0) {
+//                Gson date_events = new Gson();
+//                String date_events_json = date_events.toJson(events);
+//                sharedPreferencesHelper.put("date_events", date_events_json);
+//                events = AVService.findDate(user.getObjectId(), date);
+//            } else {
+//                if (!date_events_str.equals("")) {
+//                    Gson gson = new Gson();
+//                    events = gson.fromJson(date_events_str, new TypeToken<List<UserBean>>() {
+//                    }.getType());
+//                }
+//            }
+
+            //   sharedPreferencesHelper.put("date_events", events);
             return null;
         }
 
@@ -158,6 +178,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_date, null);
+        sharedPreferencesHelper = new SharedPreferencesHelper(getActivity(), "Date");
         return view;
     }
 
@@ -187,7 +208,9 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onStart() {
         super.onStart();
+
         new showEvents().execute();
+
 
     }
 

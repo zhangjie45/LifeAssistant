@@ -45,6 +45,8 @@
         <activity android:name=".ui.MainActivity" />
         <activity android:name=".ui.RegisterActivity" />
         <activity android:name=".ui.OpinionActivity" />
+        <activity android:name=".ui.UserInfoActivity" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.avos.avoscloud.AVOSCloud;
+
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.Utils;
 
@@ -15,6 +17,7 @@ public class SwipeBackActivity extends AppCompatActivity implements SwipeBackAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      //  AVOSCloud.initialize(this, "07jspnPs0LVvAFhOgf36OrG7-gzGzoHsz", "NzRwCw50TJDziJy73QWqEvby");
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
     }

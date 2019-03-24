@@ -101,7 +101,9 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onStart() {
         //注册EventBus
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
+        }
         super.onStart();
 
     }
@@ -430,11 +432,11 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         sharedPreferencesHelper.remove("capital_remakes_key");
-        //移除所有的粘性事件
-        EventBus.getDefault().removeAllStickyEvents();
-        //解除注册
-        EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this)) { //加上判断
+            //移除所有的粘性事件
+            EventBus.getDefault().removeAllStickyEvents();
+            //解除注册
+            EventBus.getDefault().unregister(this);
+        }
     }
-
-
 }
