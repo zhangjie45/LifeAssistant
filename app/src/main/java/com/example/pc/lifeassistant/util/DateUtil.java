@@ -1,6 +1,7 @@
 package com.example.pc.lifeassistant.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by pc on 2018/12/2.
@@ -32,4 +33,12 @@ public class DateUtil {
         return format.format(timestamp * 1000);
     }
 
+    /*
+    date转String
+
+     */
+    public static String DateToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+        return sdf.format(date);
+    }
 }

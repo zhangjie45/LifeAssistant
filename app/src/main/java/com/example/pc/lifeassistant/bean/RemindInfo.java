@@ -11,9 +11,15 @@ import java.util.Date;
  */
 @AVClassName("Remind")
 public class RemindInfo extends AVObject {
+
     private String addedpersonaccount;
     private String content;
     private Date date;
+
+
+
+
+
 
     public String getAddedpersonaccount() {
         return addedpersonaccount;
@@ -38,4 +44,6 @@ public class RemindInfo extends AVObject {
     public void setDate(Date date) {
         this.date = date;
     }
+
+
 }

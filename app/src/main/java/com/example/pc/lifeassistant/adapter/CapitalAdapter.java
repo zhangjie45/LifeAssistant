@@ -50,7 +50,6 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        Log.i("获取到的position---》", mList.get(position).getType());
         if (mList.size() == 0) {
             return EMPTY_VIEW;
         } else if (mList.get(position) == null) {

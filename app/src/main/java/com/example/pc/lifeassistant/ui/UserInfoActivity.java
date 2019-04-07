@@ -5,16 +5,22 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.DialogEditPW;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by pc on 2019/3/24.
@@ -24,6 +30,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private TextView tv_userinfo_name;
     private TextView tv_userinfo_mail;
     private TextView tv_userinfo_phone;
+    private EditText et_userinfo_remind_account;
+    private Button btn_userinfo_ok;
     private LinearLayout ll_userinfo_changpw;
     private DialogEditPW.Builder builder;
     private DialogEditPW dialogEditPW;
@@ -48,9 +56,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_userinfo_name = (TextView) findViewById(R.id.tv_userinfo_name);
         tv_userinfo_mail = (TextView) findViewById(R.id.tv_userinfo_mail);
         tv_userinfo_phone = (TextView) findViewById(R.id.tv_userinfo_phone);
+        btn_userinfo_ok = (Button) findViewById(R.id.btn_userinfo_ok);
+        et_userinfo_remind_account = (EditText) findViewById(R.id.et_userinfo_remind_account);
         ll_userinfo_changpw = (LinearLayout) findViewById(R.id.ll_userinfo_changpw);
-
         ll_userinfo_changpw.setOnClickListener(this);
+        btn_userinfo_ok.setOnClickListener(this);
+
+
     }
 
     private void ShowInfo() {
@@ -58,8 +70,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         if (user != null) {
             tv_userinfo_name.setText(user.getUsername());
             String userPhoneNum = user.getMobilePhoneNumber();
+
             if (userPhoneNum == null) {
+
                 userPhoneNum = "还未添加手机号";
+            }
+            if (null == user.get("reminders")) {
+                et_userinfo_remind_account.setHint("请输入可以提醒您的账号");
+            } else {
+                et_userinfo_remind_account.setText(user.get("reminders").toString());
             }
             tv_userinfo_phone.setText(userPhoneNum);
             tv_userinfo_mail.setText(user.getEmail());
@@ -88,11 +107,32 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                             editPw(tiet_dialog_new_password_again.getText().toString());
                             dialogEditPW.dismiss();
                             AVUser.logOut();
-//                            Intent intent = new Intent(UserInfoActivity.this, LoginActivity.class);
-//                           startActivity(intent);
                             finish();
                         }
+                    }
+                });
+                break;
+            case R.id.btn_userinfo_ok:
+                AVUser user = AVUser.getCurrentUser();
+                AVUser.getCurrentUser().put("reminders", et_userinfo_remind_account.getText());
+                AVUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if (e == null) {
+                            Toast.makeText(UserInfoActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(UserInfoActivity.this, "修改失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                user.fetchInBackground(new GetCallback<AVObject>() {
+                    @Override
+                    public void done(AVObject avObject, AVException e) {
+                        if (e == null) {
 
+                            String reminders = avObject.getString("reminders");
+                            Toast.makeText(UserInfoActivity.this, reminders, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;

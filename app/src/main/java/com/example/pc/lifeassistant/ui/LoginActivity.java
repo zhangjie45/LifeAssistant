@@ -8,7 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.LogInCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
@@ -82,10 +84,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void PersistenceLogin() {
         //获取缓存中的用户信息
         AVUser currentUser = AVUser.getCurrentUser();
+        currentUser.fetchInBackground(new GetCallback<AVObject>() {
+            @Override
+            public void done(AVObject avObject, AVException e) {
+                if (e == null){
+                    Toast.makeText(LoginActivity.this, "更新账号信息完成", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         if (currentUser != null) {
             //如果不为空则直接进入首页面
             skipAnotherActivity(this, MainActivity.class);
-            Toast.makeText(this, currentUser.getUsername(), Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, currentUser.getUsername(), Toast.LENGTH_SHORT).show();
         }
     }
 

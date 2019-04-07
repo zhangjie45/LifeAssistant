@@ -16,14 +16,16 @@
             layout="@layout/toolbar_" />
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#DEDFE0" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +38,7 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="账户"
+                    android:text="账号"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
 
@@ -61,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,6 +126,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
             </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -141,9 +145,58 @@
                 android:background="#DEDFE0" />
 
             <LinearLayout
+                android:id="@+id/ll_userinfo_remind_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="提醒账号"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/font_size_default" />
+
+                <EditText
+                    android:id="@+id/et_userinfo_remind_account"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:paddingLeft="28dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_default" />
+            <Button
+                android:id="@+id/btn_userinfo_ok"
+                android:background="@drawable/style_ok_button_radius"
+                android:text="提交"
+                android:textColor="@color/white"
+                android:layout_marginRight="15dp"
+                android:layout_width="50dp"
+                android:layout_height="30dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DEDFE0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:text="该账号将有权限提醒您" />
+
+            <LinearLayout
                 android:id="@+id/ll_userinfo_changpw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"

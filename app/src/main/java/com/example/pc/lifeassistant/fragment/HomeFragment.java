@@ -9,18 +9,26 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVCloudQueryResult;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CloudQueryCallback;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.pc.lifeassistant.R;
+import com.example.pc.lifeassistant.adapter.RemindAdapter;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.RemindInfo;
 import com.example.pc.lifeassistant.bean.WeatherData;
@@ -55,7 +63,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private TextView tv_home_expenditure;
     private String name;
     private String str_location;
-
+    private LinearLayout ll_home_remind;
+    private RecyclerView rl_remind;
     private FloatingActionButton btn_note;
     public final int MSG_DOWN_FAIL = 1;
     public final int MSG_DOWN_SUCCESS = 2;
@@ -67,6 +76,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private MyLocationListener myListener = new MyLocationListener();
     private volatile List<CapitalInfo> capitel_expenditure;
     private volatile List<RemindInfo> remind;
+    private RemindAdapter adapter;
 
     @SuppressLint({"HandlerLeak", "StaticFieldLeak"})
     private class showNum extends AsyncTask<Void, Void, Void> {
@@ -74,7 +84,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         //进入异步任务后被立即执行，一般操作UI提示用户。
         @Override
         protected void onPreExecute() {
-            //        ToastUtil("正在获取数据");
             super.onPreExecute();
         }
 
@@ -84,9 +93,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 if (user.getObjectId() == null) {
                     fragmentToActivity(LoginActivity.class);
                 }
+                if (null != user.get("reminders")) {
+                    remind = AVService.queryRemind(user.getUsername(), user.get("reminders").toString(), Utils.now_Day());
+                }
                 num = AVService.queryEventNum(user.getObjectId(), Utils.now_Day());
                 capitel_expenditure = AVService.expenditureCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
-                remind = AVService.queryRemind(user.getUsername(), "Tom", Utils.now_Day());
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -97,11 +109,35 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         protected void onPostExecute(Void result) {
             tv_home_event_num.setText(num + "");
             tv_home_expenditure.setText(Utils.Count(capitel_expenditure) + "");
-            for (int i = 0; i < remind.size(); i++) {
-                //  Log.i("remind内容："+ remind.get(i).getContent());
+            if (remind != null && remind.size() != 0) {
+                adapter = new RemindAdapter(getActivity(), remind);
+                rl_remind.setLayoutManager(new LinearLayoutManager(getActivity()));
+                rl_remind.setAdapter(adapter);
+                ll_home_remind.setVisibility(View.VISIBLE);
+                rl_remind.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.setOnClick(new RemindAdapter.ClickInterface() {
+                            @Override
+                            public void onClick(View view, int position) {
+                                AVQuery.doCloudQueryInBackground("delete from Remind where objectId='" + remind.get(position).getObjectId() + "'", new CloudQueryCallback<AVCloudQueryResult>() {
+                                    @Override
+                                    public void done(AVCloudQueryResult avCloudQueryResult, AVException e) {
+                                        // 如果 e 为空，说明保存成功
+                                        if (e == null) {
+                                            ToastUtil("删除成功");
+                                            new showNum().execute();
+                                        } else {
+                                            ToastUtil("删除失败" + e.getMessage());
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
-            // Log.i("remind内容："+remind.get[]);
-            ToastUtil(remind.size() + "");
+
         }
     }
 
@@ -138,6 +174,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         tv_home_wea = getActivity().findViewById(R.id.tv_home_wea);
         tv_home_event_num = getActivity().findViewById(R.id.tv_home_event_num);
         tv_home_expenditure = getActivity().findViewById(R.id.tv_home_expenditure);
+        ll_home_remind = getActivity().findViewById(R.id.ll_home_remind);
+        rl_remind = getActivity().findViewById(R.id.rl_home_remind);
         btn_note.setOnClickListener(this);
         mLocationClient = new LocationClient(getActivity());//声明LocationClient类
         mLocationClient.registerLocationListener(myListener); //注册监听函数

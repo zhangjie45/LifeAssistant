@@ -208,7 +208,6 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onStart() {
         super.onStart();
-
         new showEvents().execute();
 
 
