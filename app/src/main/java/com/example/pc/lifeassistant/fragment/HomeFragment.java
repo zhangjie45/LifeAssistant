@@ -136,6 +136,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                         });
                     }
                 });
+            } else {
+                ll_home_remind.setVisibility(View.GONE);
+
             }
 
         }
@@ -216,33 +219,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         httpEntity.request();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-////                    Message msg = new Message();
-////                    msg.what = MSG_DOWN_SUCCESS;
-////                    msg.obj = str_location;
-////                    handler_location.sendMessage(msg);
-////                    //初始化
-//                    OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
-//                    Request request = new Request.Builder()
-//                            .url("https://www.tianqiapi.com/api/?version=v1&city=" + city.substring(0, city.length() - 1))//请求接口。如果需要传参拼接到接口后面。
-//                            .build();//创建Request 对象
-//                    Response response = null;
-//                    response = client.newCall(request).execute();//得到Response 对象
-//                    if (response.isSuccessful()) {
-//                        Log.i("请求结果", "OK");
-////                        Log.i("kwwl", "response.code()==" + response.code());
-////                        Log.i("kwwl", "response.message()==" + response.message());
-////                        Log.i("kwwl", "res==" + response.body().string());
-//                        //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
 
     }
 
@@ -250,8 +226,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         tv_home_date.setText(Utils.nowDay());
 
     }
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

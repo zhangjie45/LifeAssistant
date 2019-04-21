@@ -103,7 +103,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         tiet_dialog_new_password_again = dialogEditPW.findViewById(R.id.tiet_dialog_new_password_again);
                         if (!tiet_dialog_new_password.getText().toString().equals(tiet_dialog_new_password_again.getText().toString())) {
                             Toast.makeText(UserInfoActivity.this, "两次密码不一致", Toast.LENGTH_SHORT).show();
-                        } else {
+
+                        } else if(tiet_dialog_new_password.getText().toString().equals("")||tiet_dialog_new_password_again.getText().toString().equals("")) {
+                            Toast.makeText(UserInfoActivity.this, "密码格式有误", Toast.LENGTH_SHORT).show();
+                        }else{
                             editPw(tiet_dialog_new_password_again.getText().toString());
                             dialogEditPW.dismiss();
                             AVUser.logOut();

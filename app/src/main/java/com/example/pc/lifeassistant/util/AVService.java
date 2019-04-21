@@ -5,6 +5,7 @@ import android.util.Log;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.example.pc.lifeassistant.bean.ApkVersionInfo;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.bean.RemindInfo;
@@ -146,5 +147,15 @@ public class AVService {
             return Collections.emptyList();
         }
 
+    }
+
+    //查询服务器中软件版本号
+    public static List<ApkVersionInfo> queryApkVersion() throws ParseException {
+        final AVQuery<ApkVersionInfo> apkVersion = new AVQuery<>("APKVersion");
+        try {
+            return apkVersion.find();
+        } catch (AVException e) {
+            return Collections.emptyList();
+        }
     }
 }

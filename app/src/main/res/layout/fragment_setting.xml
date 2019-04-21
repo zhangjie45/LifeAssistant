@@ -161,6 +161,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_setting_cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -214,8 +215,10 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_setting_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:orientation="horizontal"
             android:paddingBottom="15dp"
             android:paddingLeft="10dp"
@@ -227,20 +230,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
+                android:layout_weight="1"
                 android:text="当前版本" />
 
-
             <RelativeLayout
+                android:id="@+id/rl_setting_version"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right">
 
                 <TextView
+                    android:id="@+id/tv_setting_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="V1.0" />
+                    android:paddingLeft="5dp"/>
             </RelativeLayout>
 
         </LinearLayout>

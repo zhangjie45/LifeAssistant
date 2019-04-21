@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
+import com.example.pc.lifeassistant.bean.ApkVersionInfo;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.DateInfo;
 import com.example.pc.lifeassistant.bean.RemindInfo;
@@ -44,6 +45,7 @@ public class BaseActivity extends SwipeBackActivity {
         AVObject.registerSubclass(DateInfo.class);
         AVObject.registerSubclass(CapitalInfo.class);
         AVObject.registerSubclass(RemindInfo.class);
+        AVObject.registerSubclass(ApkVersionInfo.class);
         AVOSCloud.initialize(this, "07jspnPs0LVvAFhOgf36OrG7-gzGzoHsz", "NzRwCw50TJDziJy73QWqEvby");
         //  setContentView(getResViewId());
         //调试日志

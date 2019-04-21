@@ -44,7 +44,6 @@ public class HttpEntity {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         this.request = new Request.Builder()
                 .url(HttpConstant.URL)
-                .method(HttpConstant.HTTP_GET,body)
                 .build();
         this.callback = callback;
     }
