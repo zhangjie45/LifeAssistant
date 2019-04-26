@@ -1,16 +1,31 @@
 package com.example.pc.lifeassistant.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +44,24 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.RemindAdapter;
+import com.example.pc.lifeassistant.bean.ApkVersionInfo;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.bean.RemindInfo;
 import com.example.pc.lifeassistant.bean.WeatherData;
 import com.example.pc.lifeassistant.ui.LoginActivity;
+import com.example.pc.lifeassistant.ui.MainActivity;
 import com.example.pc.lifeassistant.ui.NoteActivity;
+import com.example.pc.lifeassistant.util.APKVersionCodeUtils;
 import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
+import com.example.pc.lifeassistant.util.DialogNewVersion;
+import com.example.pc.lifeassistant.util.DownloadUtil;
 import com.example.pc.lifeassistant.util.HttpConstant;
 import com.example.pc.lifeassistant.util.HttpEntity;
 import com.example.pc.lifeassistant.util.Utils;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -49,6 +70,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 
 /**
@@ -66,9 +89,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayout ll_home_remind;
     private RecyclerView rl_remind;
     private FloatingActionButton btn_note;
-    public final int MSG_DOWN_FAIL = 1;
-    public final int MSG_DOWN_SUCCESS = 2;
-    public final int MSG_DOWN_START = 3;
     String city;
     int num;
     AVUser user = AVUser.getCurrentUser();
@@ -76,7 +96,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private MyLocationListener myListener = new MyLocationListener();
     private volatile List<CapitalInfo> capitel_expenditure;
     private volatile List<RemindInfo> remind;
+    private volatile List<ApkVersionInfo> versionInfo;
     private RemindAdapter adapter;
+    private DialogNewVersion.Builder new_version_builder;
+    private DialogNewVersion new_version_dialog;
+    private String APK_NAME = "lifeassistant";
+    private ProgressDialog progressDialog;
 
     @SuppressLint({"HandlerLeak", "StaticFieldLeak"})
     private class showNum extends AsyncTask<Void, Void, Void> {
@@ -98,7 +123,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 }
                 num = AVService.queryEventNum(user.getObjectId(), Utils.now_Day());
                 capitel_expenditure = AVService.expenditureCapital(user.getObjectId(), Utils.firstDay(), Utils.lastDay());
-
+                versionInfo = AVService.queryApkVersion();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -138,11 +163,33 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 });
             } else {
                 ll_home_remind.setVisibility(View.GONE);
-
             }
-
+            //更新新版本
+            if (!((APKVersionCodeUtils.getVersionCode(getActivity()) + "").equals(versionInfo.get(0).getVersion()))) {
+                getVersion(versionInfo.get(0).getVersioncontent());
+            }
         }
     }
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    progressDialog.cancel();
+                    installApkO(getActivity(), Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS) + "/" + APK_NAME + ".apk");
+                    break;
+                case 11:
+                    progressDialog.setProgress((Integer) msg.obj);
+                    break;
+                case 1:
+                    ToastUtil("下载异常");
+                    break;
+            }
+        }
+    };
 
     public static final HomeFragment newInstance(String name) {
         HomeFragment homeFragment = new HomeFragment();
@@ -159,6 +206,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         if (args != null) {
             name = args.getString("name");
         }
+        new_version_builder = new DialogNewVersion.Builder(this.getActivity());
     }
 
     @Nullable
@@ -184,13 +232,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mLocationClient.registerLocationListener(myListener); //注册监听函数
         initLocation();
         mLocationClient.start();//调用LocationClient的start()方法，便可发起定位请求
+        setHasOptionsMenu(true);
         //启动异步操作
         new showNum().execute();
-
         HttpConstant.URL += city;
         show_day();
         getDatasync();
-
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -203,7 +250,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i("RESPONSE", "Network Response!");
                 ResponseBody responseBody = response.body();
                 final String result = responseBody.string();
                 WeatherData data = new Gson().fromJson(result, WeatherData.class);
@@ -226,6 +272,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         tv_home_date.setText(Utils.nowDay());
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -253,7 +300,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         /**可选，设置是否使用gps，默认false使用高精度和仅用设备两种定位模式的，参数必须设置为true*/
 
         option.setLocationNotify(true);
-/**可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false*/
+        /**可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false*/
 
         option.setIgnoreKillProcess(false);
         /**定位SDK内部是一个service，并放到了独立进程。设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)*/
@@ -289,6 +336,132 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         }
 
     }
+
+
+    private void getVersion(String versionContent) {
+        showNewVersionDialog(versionContent, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new_version_dialog.dismiss();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //  ToastUtil("下载新应用");
+                new_version_dialog.dismiss();
+                permission();
+            }
+        });
+    }
+
+
+    //开启权限
+    private void permission() {
+        if (Build.VERSION.SDK_INT >= 24) {//如果是6.0以上的
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (getActivity().checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    getActivity().requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                    return;
+                }
+            }
+        }
+        new Thread(downloadApk).start();
+        progressDialog = new ProgressDialog(getActivity());    //进度条，在下载的时候实时更新进度，提高用户友好度
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setTitle("正在下载");
+        progressDialog.setMessage("请稍候...");
+        progressDialog.setProgress(0);
+        progressDialog.show();
+    }
+
+    //执行更新软件操作
+    Runnable downloadApk = new Runnable() {
+
+        @Override
+        public void run() {
+            String url = versionInfo.get(0).getUrl();
+
+            DownloadUtil.get().download(url, String.valueOf(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)), APK_NAME + ".apk", new DownloadUtil.OnDownloadListener() {
+                @Override
+                public void onDownloadSuccess(File file) {
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    //下载完成进行相关逻辑操作
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 0;
+                    mHandler.sendMessage(msg);
+                }
+
+                @Override
+                public void onDownloading(int progress) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 11;
+                    msg.obj = progress;
+                    // Log.i("进度：", progress + "");
+
+                    mHandler.sendMessage(msg);
+
+                }
+
+                @Override
+                public void onDownloadFailed(Exception e) {
+                    //下载异常进行相关提示操作
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 1;
+                    msg.obj = e;
+                    mHandler.sendMessage(msg);
+
+                }
+            });
+        }
+    };
+
+    //兼容8.0安装位置来源的权限
+    private void installApkO(Context context, String downloadApkPath) {
+        if (context == null || TextUtils.isEmpty(downloadApkPath)) {
+            return;
+        }
+        File apkFile = new File(downloadApkPath);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            Uri contentUri;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                contentUri = FileProvider.getUriForFile(context, "com.example.pc.lifeassistant.fileprovider", apkFile);
+            } else {
+                contentUri = Uri.fromFile(apkFile);
+            }
+            Runtime.getRuntime().exec("chmod 777 " + apkFile.getCanonicalPath());
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            //查询所有符合 intent 跳转目标应用类型的应用
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            //然后全部授权
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+            context.startActivity(intent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //提示有新版本发布
+    private void showNewVersionDialog(String content, View.OnClickListener onCloseClickListener, View.OnClickListener onOkClickListener) {
+        new_version_dialog = new_version_builder.setMessage(content)
+                .closeChangeButton(onCloseClickListener)
+                .okDeleteButton(onOkClickListener)
+                .DialogNerVersionDialog();
+        new_version_dialog.show();
+    }
+
 
 }
 

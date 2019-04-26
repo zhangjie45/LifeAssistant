@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -94,7 +95,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 tv_setting_version.setText("有新版本");
                 tv_setting_version.setTextColor(getResources().getColor(R.color.event_agency));
             }else{
-                tv_setting_version.setText(versionInfo.get(0).getVersionInformation());
+                tv_setting_version.setText(APKVersionCodeUtils.getVerName(getActivity()));
             }
         }
     }
@@ -157,6 +158,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         ll_setting_userinfo.setOnClickListener(this);
         ll_setting_cache.setOnClickListener(this);
         ll_setting_version.setOnClickListener(this);
+        setHasOptionsMenu(true);
         //用户信息展示
         ShowInfo();
         new showInfo().execute();
@@ -239,8 +241,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void run() {
                 String url = versionInfo.get(0).getUrl();
-
-                String versionInformation = versionInfo.get(0).getVersionInformation();
                 DownloadUtil.get().download(url, String.valueOf(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)), APK_NAME+".apk", new DownloadUtil.OnDownloadListener() {
                     @Override
                     public void onDownloadSuccess(File file) {
