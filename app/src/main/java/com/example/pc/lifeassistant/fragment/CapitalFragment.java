@@ -166,7 +166,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        tv_tb_add_date = getActivity().findViewById(R.id.tv_tb_add);
+        tv_tb_add_date = getActivity().findViewById(R.id.tv_tb_capital_add);
         tv_monthly_incomel = getActivity().findViewById(R.id.tv_monthly_income);
         tv_monthly_expenditure = getActivity().findViewById(R.id.tv_monthly_expenditure);
         recyclerView = getActivity().findViewById(R.id.fm_captial_RecyclerView);
@@ -174,6 +174,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         tv_tb_add_date.setOnClickListener(this);
+        setHasOptionsMenu(true);
     }
 
 
@@ -189,7 +190,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_tb_add:
+            case R.id.tv_tb_capital_add:
                 fragmentToActivity(AddCapitalActivity.class);
                 break;
         }

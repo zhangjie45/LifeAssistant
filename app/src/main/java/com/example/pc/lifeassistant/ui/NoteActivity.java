@@ -51,7 +51,7 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener {
         et_note = (EditText) findViewById(R.id.et_note);
         sharedPreferencesHelper = new SharedPreferencesHelper(
                 NoteActivity.this, "note");
-        tv_tb_add = (TextView) findViewById(R.id.tv_tb_add);
+        tv_tb_add = (TextView) findViewById(R.id.tv_tb_date_add);
 
 
     }

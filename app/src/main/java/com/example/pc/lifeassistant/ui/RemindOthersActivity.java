@@ -37,6 +37,7 @@ public class RemindOthersActivity extends BaseActivity implements View.OnClickLi
     private TextInputEditText tiet_remind_id;
     private RelativeLayout rl_remind_query;
     private LinearLayout ll_remind_content;
+    private LinearLayout ll_remind_ok;
     private EditText et_remind_date;
     private EditText et_remind_content;
     private Button btn_remind_save;
@@ -75,8 +76,11 @@ public class RemindOthersActivity extends BaseActivity implements View.OnClickLi
             }
             if (usename.equals(user.getUsername())) {
                 ll_remind_content.setVisibility(View.VISIBLE);
+                ll_remind_ok.setVisibility(View.VISIBLE);
             } else {
                 til_remind_id.setError("该账号暂时未把你设为可提醒对象！");
+                ll_remind_content.setVisibility(View.GONE);
+                ll_remind_ok.setVisibility(View.GONE);
             }
 
         }
@@ -100,6 +104,7 @@ public class RemindOthersActivity extends BaseActivity implements View.OnClickLi
         tiet_remind_id = (TextInputEditText) findViewById(R.id.tiet_remind_id);
         rl_remind_query = (RelativeLayout) findViewById(R.id.rl_remind_query);
         ll_remind_content = (LinearLayout) findViewById(R.id.ll_remind_content);
+        ll_remind_ok = (LinearLayout) findViewById(R.id.ll_remind_ok);
         et_remind_date = (EditText) findViewById(R.id.et_remind_date);
         et_remind_content = (EditText) findViewById(R.id.et_remind_content);
         btn_remind_save = (Button) findViewById(R.id.btn_remind_save);

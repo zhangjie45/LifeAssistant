@@ -185,7 +185,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        tv_tb_add_date = getActivity().findViewById(R.id.tv_tb_add);
+        tv_tb_add_date = getActivity().findViewById(R.id.tv_tb_date_add);
         rv_date = getActivity().findViewById(R.id.rv_fragment_date);
         date_swipe_refresh = getActivity().findViewById(R.id.date_swipe_refresh);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -194,6 +194,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
         new showEvents().execute();
         tv_tb_add_date.setOnClickListener(this);
         tv_tb_add_date.setOnLongClickListener(this);
+        setHasOptionsMenu(true);
         date_swipe_refresh.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -216,7 +217,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_tb_add:
+            case R.id.tv_tb_date_add:
                 fragmentToActivity(AddDateActivity.class);
                 break;
         }
@@ -226,7 +227,7 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_tb_add:
+            case R.id.tv_tb_date_add:
                 fragmentToActivity(RemindOthersActivity.class);
                 break;
         }

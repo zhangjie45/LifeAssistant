@@ -10,7 +10,8 @@ import com.avos.avoscloud.AVObject;
 public class ApkVersionInfo extends AVObject {
     public String version;
     public String url;
-    public String versionInformation;
+    public String versioncontent;
+
 
     public String getVersion() {
         return version;
@@ -28,11 +29,11 @@ public class ApkVersionInfo extends AVObject {
         this.url = url;
     }
 
-    public String getVersionInformation() {
-        return versionInformation;
+    public String getVersioncontent() {
+        return versioncontent;
     }
 
-    public void setVersionInformation(String versionInformation) {
-        this.versionInformation = versionInformation;
+    public void setVersioncontent(String versioncontent) {
+        this.versioncontent = versioncontent;
     }
 }

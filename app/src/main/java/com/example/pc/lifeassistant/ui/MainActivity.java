@@ -3,6 +3,7 @@ package com.example.pc.lifeassistant.ui;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,7 +27,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private DateFragment dateFragment;
     private CapitalFragment capitalFragment;
     private SettingFragment settingFragment;
-    private TextView tv_tb_add;
+    private TextView tv_tb_date_add;
+    private TextView tv_tb_capital_add;
 
 
     @Override
@@ -50,20 +52,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .setFirstSelectedPosition(0)
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
-        initToolbar(R.id.tl_, R.id.toolbar_title, "首页", false);
-        setDefaultFragment();
+         initToolbar(R.id.tl_, R.id.toolbar_title, "首页", false);
+         setDefaultFragment();
     }
 
     private void setDefaultFragment() {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        HomeFragment homeFragment = HomeFragment.newInstance(getString(R.string.item_home));
-        transaction.replace(R.id.sub_content, homeFragment).commit();
-
+        homeFragment = new HomeFragment();
+        transaction.add(R.id.sub_content, homeFragment);
+        transaction.commit();
     }
 
     public void init() {
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_nar_bar);
-        tv_tb_add = (TextView) findViewById(R.id.tv_tb_add);
+        tv_tb_date_add = (TextView) findViewById(R.id.tv_tb_date_add);
+        tv_tb_capital_add = (TextView) findViewById(R.id.tv_tb_capital_add);
 
     }
 
@@ -71,42 +74,76 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public void onTabSelected(int position) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
+        hideFragments(transaction);
         switch (position) {
             case 0:
-                tv_tb_add.setVisibility(View.GONE);
+                tv_tb_date_add.setVisibility(View.GONE);
+                tv_tb_capital_add.setVisibility(View.GONE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "首页", false);
                 if (homeFragment == null) {
-                    homeFragment = HomeFragment.newInstance(getString(R.string.item_home));
+                    homeFragment = new HomeFragment();
+                    transaction.add(R.id.sub_content, homeFragment);
+                } else {
+                    transaction.show(homeFragment);
                 }
-                transaction.replace(R.id.sub_content, homeFragment);
                 break;
             case 1:
-                tv_tb_add.setVisibility(View.VISIBLE);
+                tv_tb_date_add.setVisibility(View.VISIBLE);
+                tv_tb_capital_add.setVisibility(View.GONE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "日程管理", false);
                 if (dateFragment == null) {
-                    dateFragment = DateFragment.newInstance(getString(R.string.item_date));
+                    dateFragment = new DateFragment();
+                    transaction.add(R.id.sub_content, dateFragment);
+                } else {
+                    transaction.show(dateFragment);
                 }
-                transaction.replace(R.id.sub_content, dateFragment);
                 break;
             case 2:
-                tv_tb_add.setVisibility(View.VISIBLE);
+                tv_tb_date_add.setVisibility(View.GONE);
+                tv_tb_capital_add.setVisibility(View.VISIBLE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "资金管理", false);
                 if (capitalFragment == null) {
-                    capitalFragment = CapitalFragment.newInstance(getString(R.string.item_capital));
+                    capitalFragment = new CapitalFragment();
+                    transaction.add(R.id.sub_content, capitalFragment);
+                } else {
+                    transaction.show(capitalFragment);
                 }
-                transaction.replace(R.id.sub_content, capitalFragment);
                 break;
             case 3:
-                tv_tb_add.setVisibility(View.GONE);
+                //显示、加载Fragment
+                tv_tb_date_add.setVisibility(View.GONE);
+                tv_tb_capital_add.setVisibility(View.GONE);
                 initToolbar(R.id.tl_, R.id.toolbar_title, "设置", false);
                 if (settingFragment == null) {
-                    settingFragment = SettingFragment.newInstance(getString(R.string.item_setting));
+                    settingFragment = new SettingFragment();
+                    transaction.add(R.id.sub_content, settingFragment);
+                } else {
+                    transaction.show(settingFragment);
                 }
-                transaction.replace(R.id.sub_content, settingFragment);
                 break;
+            default:
+
         }
         transaction.commit();
+
     }
+
+    private void hideFragments(FragmentTransaction transaction) {
+        if (homeFragment != null) {
+            transaction.hide(homeFragment);
+        }
+        if (dateFragment != null) {
+            transaction.hide(dateFragment);
+        }
+        if (capitalFragment != null) {
+            transaction.hide(capitalFragment);
+        }
+        if (settingFragment != null) {
+            transaction.hide(settingFragment);
+        }
+
+    }
+
 
     @Override
     public void onTabUnselected(int position) {
