@@ -1,6 +1,5 @@
 package com.example.pc.lifeassistant.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -19,8 +18,6 @@ import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.DialogEditPW;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by pc on 2019/3/24.

@@ -18,9 +18,6 @@ import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.RegexUtils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Created by pc on 2019/1/5.
  */

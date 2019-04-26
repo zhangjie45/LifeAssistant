@@ -7,8 +7,6 @@ import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.example.pc.lifeassistant.R;
-
 /**
  * Created by pc on 2018/12/2.
  */

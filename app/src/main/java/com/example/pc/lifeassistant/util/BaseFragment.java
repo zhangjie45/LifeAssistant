@@ -4,8 +4,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.pc.lifeassistant.ui.AddDateActivity;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

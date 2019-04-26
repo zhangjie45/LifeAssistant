@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.example.pc.lifeassistant.bean.CapitalInfo;
 import com.example.pc.lifeassistant.interface_.OnItemClickListener;
 import com.example.pc.lifeassistant.util.ItemTouchHelperAdapter;
 import com.example.pc.lifeassistant.util.Utils;
-
 
 import java.text.ParseException;
 import java.util.Collections;

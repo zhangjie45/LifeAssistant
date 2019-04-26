@@ -3,8 +3,6 @@ package com.example.pc.lifeassistant.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Arrays;
-
 /**
  * Created by pc on 2019/2/19.
  */

@@ -21,7 +21,6 @@ import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseActivity;
-import com.example.pc.lifeassistant.util.Utils;
 
 import java.text.ParseException;
 import java.util.Calendar;

@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import com.example.pc.lifeassistant.util.DialogCustom;
 import com.example.pc.lifeassistant.util.DialogDelChange;
 import com.example.pc.lifeassistant.util.SharedPreferencesHelper;
 import com.example.pc.lifeassistant.util.myItemTouchHelperCallBack;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 

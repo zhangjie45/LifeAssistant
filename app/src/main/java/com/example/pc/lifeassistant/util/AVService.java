@@ -1,7 +1,5 @@
 package com.example.pc.lifeassistant.util;
 
-import android.util.Log;
-
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;

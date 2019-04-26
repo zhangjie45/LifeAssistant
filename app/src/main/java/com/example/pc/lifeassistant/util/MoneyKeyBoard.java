@@ -8,12 +8,9 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-
-import com.example.pc.lifeassistant.R;
-
-import android.inputmethodservice.Keyboard.Key;
 
 import java.lang.reflect.Field;
 import java.util.List;

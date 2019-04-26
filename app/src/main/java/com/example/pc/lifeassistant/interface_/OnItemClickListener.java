@@ -1,7 +1,5 @@
 package com.example.pc.lifeassistant.interface_;
 
-import android.view.View;
-
 import java.util.Date;
 
 /**

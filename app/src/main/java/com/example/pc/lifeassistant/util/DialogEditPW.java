@@ -3,8 +3,6 @@ package com.example.pc.lifeassistant.util;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
