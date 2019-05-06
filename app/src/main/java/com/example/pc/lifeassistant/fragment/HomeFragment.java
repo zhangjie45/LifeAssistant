@@ -456,7 +456,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         new_version_dialog.show();
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        new showNum().execute();
+    }
 }
 
 

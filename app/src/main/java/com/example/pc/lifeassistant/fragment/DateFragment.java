@@ -212,6 +212,16 @@ public class DateFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            return;
+        }else{
+            new showEvents().execute();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_tb_date_add:
