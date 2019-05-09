@@ -42,7 +42,6 @@
                         android:id="@+id/tv_setting_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="张三"
                         android:textSize="@dimen/font_size_default" />
 
                     <LinearLayout
@@ -61,8 +60,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="5dp"
-                            android:paddingTop="5dp"
-                            android:text="18787878787" />
+                            android:paddingTop="5dp" />
                     </LinearLayout>
 
 
@@ -82,8 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="5dp"
-                            android:paddingTop="5dp"
-                            android:text="123456@xx.com" />
+                            android:paddingTop="5dp" />
                     </LinearLayout>
                 </LinearLayout>
 

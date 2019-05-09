@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:focusableInTouchMode="true"
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"
                 android:paddingLeft="15dp"
@@ -42,12 +43,13 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
 
-                <TextView
-                    android:id="@+id/tv_userinfo_name"
+                <EditText
+                    android:id="@+id/et_userinfo_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="测试账号"
+                    android:background="@null"
+                    android:hint="账号不能为空"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
             </LinearLayout>
@@ -68,6 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:focusableInTouchMode="true"
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"
                 android:paddingLeft="15dp"
@@ -80,12 +83,13 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
 
-                <TextView
-                    android:id="@+id/tv_userinfo_mail"
+                <EditText
+                    android:id="@+id/et_userinfo_mail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="123@qq.com"
+                    android:background="@null"
+                    android:hint="邮箱不能为空"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
             </LinearLayout>
@@ -105,6 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:focusableInTouchMode="true"
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"
                 android:paddingLeft="15dp"
@@ -117,12 +122,13 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
 
-                <TextView
-                    android:id="@+id/tv_userinfo_phone"
+                <EditText
+                    android:id="@+id/et_userinfo_phone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="18787878787"
+                    android:background="@null"
+                    android:hint="请添加手机号"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
             </LinearLayout>
@@ -171,14 +177,15 @@
                     android:paddingLeft="28dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
-            <Button
-                android:id="@+id/btn_userinfo_ok"
-                android:background="@drawable/style_ok_button_radius"
-                android:text="提交"
-                android:textColor="@color/white"
-                android:layout_marginRight="15dp"
-                android:layout_width="50dp"
-                android:layout_height="30dp" />
+
+                <Button
+                    android:id="@+id/btn_userinfo_ok"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/style_ok_button_radius"
+                    android:text="提交"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <TextView

@@ -63,7 +63,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     private ProgressDialog progressDialog;
     private volatile List<ApkVersionInfo> versionInfo;
-    private String APK_NAME="lifeassistant";
+    private volatile List<AVUser> users;
+    private String APK_NAME = "lifeassistant";
+    AVUser user = AVUser.getCurrentUser();
+
     public class showInfo extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -76,6 +79,8 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         protected Void doInBackground(Void... voids) {
             try {
                 versionInfo = AVService.queryApkVersion();
+
+                users = AVService.queryUserInfo(user.getObjectId());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -85,10 +90,17 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         @SuppressLint("ResourceAsColor")
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(!((APKVersionCodeUtils.getVersionCode(getActivity()) + "").equals( versionInfo.get(0).getVersion()))){
+            tv_setting_name.setText(users.get(0).getUsername());
+            String userPhoneNum = users.get(0).getMobilePhoneNumber();
+            if (userPhoneNum.equals("")) {
+                userPhoneNum = "还未添加手机号";
+            }
+            tv_setting_phone.setText(userPhoneNum);
+            tv_setting_email.setText(users.get(0).getEmail());
+            if (!((APKVersionCodeUtils.getVersionCode(getActivity()) + "").equals(versionInfo.get(0).getVersion()))) {
                 tv_setting_version.setText("有新版本");
                 tv_setting_version.setTextColor(getResources().getColor(R.color.event_agency));
-            }else{
+            } else {
                 tv_setting_version.setText(APKVersionCodeUtils.getVerName(getActivity()));
             }
         }
@@ -102,7 +114,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             switch (msg.what) {
                 case 0:
                     progressDialog.cancel();
-                    installApkO(getActivity(), Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)+"/"+APK_NAME+".apk");
+                    installApkO(getActivity(), Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS) + "/" + APK_NAME + ".apk");
                     break;
                 case 11:
                     progressDialog.setProgress((Integer) msg.obj);
@@ -161,6 +173,22 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
 
     @Override
+    public void onStart() {
+        super.onStart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                new showInfo().execute();
+            }
+        }).start();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_setting_opinion:
@@ -176,9 +204,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 fragmentToActivity(UserInfoActivity.class);
                 break;
             case R.id.ll_setting_version:
-                if(tv_setting_version.getText().equals(("有新版本"))){
+                if (tv_setting_version.getText().equals(("有新版本"))) {
                     permission();
-                }else{
+                } else {
                     ToastUtil("当前为最新版本");
                 }
                 break;
@@ -189,11 +217,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
 
     private void ShowInfo() {
-        AVUser user = AVUser.getCurrentUser();
         if (user != null) {
             tv_setting_name.setText(user.getUsername());
             String userPhoneNum = user.getMobilePhoneNumber();
-            if (userPhoneNum == null) {
+            if (userPhoneNum.equals("")) {
                 userPhoneNum = "还未添加手机号";
             }
             tv_setting_phone.setText(userPhoneNum);
@@ -229,47 +256,47 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         progressDialog.show();
     }
 
-        //执行更新软件操作
-        Runnable downloadApk = new Runnable() {
+    //执行更新软件操作
+    Runnable downloadApk = new Runnable() {
 
-            @Override
-            public void run() {
-                String url = versionInfo.get(0).getUrl();
-                DownloadUtil.get().download(url, String.valueOf(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)), APK_NAME+".apk", new DownloadUtil.OnDownloadListener() {
-                    @Override
-                    public void onDownloadSuccess(File file) {
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            progressDialog.dismiss();
-                        }
-                        //下载完成进行相关逻辑操作
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 0;
-                        mHandler.sendMessage(msg);
+        @Override
+        public void run() {
+            String url = versionInfo.get(0).getUrl();
+            DownloadUtil.get().download(url, String.valueOf(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)), APK_NAME + ".apk", new DownloadUtil.OnDownloadListener() {
+                @Override
+                public void onDownloadSuccess(File file) {
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
                     }
+                    //下载完成进行相关逻辑操作
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 0;
+                    mHandler.sendMessage(msg);
+                }
 
-                    @Override
-                    public void onDownloading(int progress) {
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 11;
-                        msg.obj = progress;
-                        // Log.i("进度：", progress + "");
+                @Override
+                public void onDownloading(int progress) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 11;
+                    msg.obj = progress;
+                    // Log.i("进度：", progress + "");
 
-                        mHandler.sendMessage(msg);
+                    mHandler.sendMessage(msg);
 
-                    }
+                }
 
-                    @Override
-                    public void onDownloadFailed(Exception e) {
-                        //下载异常进行相关提示操作
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 1;
-                        msg.obj = e;
-                        mHandler.sendMessage(msg);
+                @Override
+                public void onDownloadFailed(Exception e) {
+                    //下载异常进行相关提示操作
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 1;
+                    msg.obj = e;
+                    mHandler.sendMessage(msg);
 
-                    }
-                });
-            }
-        };
+                }
+            });
+        }
+    };
 
     /**
      * 兼容8.0安装位置来源的权限
@@ -305,4 +332,11 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            new showInfo().execute();
+        }
+    }
 }

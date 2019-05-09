@@ -156,4 +156,16 @@ public class AVService {
             return Collections.emptyList();
         }
     }
+
+    //查询账号信息
+    public static List<AVUser> queryUserInfo(String ObjectId){
+        final AVQuery<AVUser> objectId = new AVQuery<>("_User");
+        objectId.whereEqualTo("objectId", ObjectId);
+        AVQuery<AVUser> query = AVQuery.and(Arrays.asList(objectId));
+        try {
+            return query.find();
+        } catch (AVException e) {
+            return Collections.emptyList();
+        }
+    }
 }
