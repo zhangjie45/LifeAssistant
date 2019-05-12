@@ -31,6 +31,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         setContentView(R.layout.activity_main);
         init();
         event();
+        closeSwipeBack();
 
 
     }
