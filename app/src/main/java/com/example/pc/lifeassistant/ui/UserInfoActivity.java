@@ -8,16 +8,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.RequestMobileCodeCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.util.BaseActivity;
 import com.example.pc.lifeassistant.util.DialogEditPW;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by pc on 2019/3/24.
@@ -28,6 +32,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private EditText et_userinfo_mail;
     private EditText et_userinfo_phone;
     private EditText et_userinfo_remind_account;
+    private TextView tv_phone_verification_userinfo;
     private Button btn_userinfo_ok;
     private LinearLayout ll_userinfo_changpw;
     private DialogEditPW.Builder builder;
@@ -53,11 +58,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         et_userinfo_name = (EditText) findViewById(R.id.et_userinfo_name);
         et_userinfo_mail = (EditText) findViewById(R.id.et_userinfo_mail);
         et_userinfo_phone = (EditText) findViewById(R.id.et_userinfo_phone);
+        tv_phone_verification_userinfo = (TextView) findViewById(R.id.tv_phone_verification_userinfo);
         btn_userinfo_ok = (Button) findViewById(R.id.btn_userinfo_ok);
         et_userinfo_remind_account = (EditText) findViewById(R.id.et_userinfo_remind_account);
         ll_userinfo_changpw = (LinearLayout) findViewById(R.id.ll_userinfo_changpw);
         ll_userinfo_changpw.setOnClickListener(this);
         btn_userinfo_ok.setOnClickListener(this);
+        tv_phone_verification_userinfo.setOnClickListener(this);
     }
 
     private void ShowInfo() {
@@ -66,26 +73,34 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             user.fetchInBackground(new GetCallback<AVObject>() {
                 @Override
                 public void done(AVObject avObject, AVException e) {
-                    if(e == null){
+                    if (e == null) {
                         et_userinfo_name.setText(user.getUsername());
                         String userPhoneNum = user.getMobilePhoneNumber();
+                        boolean phoneVerification = (boolean) user.get("mobilePhoneVerified");
                         if (userPhoneNum == null) {
-                            userPhoneNum = "还未添加手机号";
+                            userPhoneNum = "";
+                            tv_phone_verification_userinfo.setVisibility(View.GONE);
+                        }else{
+                            if (!phoneVerification) {
+                                tv_phone_verification_userinfo.setVisibility(View.VISIBLE);
+                                //sendVerificationMsg(userPhoneNum);
+                            }
                         }
                         if (null == user.get("reminders")) {
                             et_userinfo_remind_account.setHint("请输入可以提醒您的账号");
                         } else {
                             et_userinfo_remind_account.setText(user.get("reminders").toString());
                         }
+
                         et_userinfo_phone.setText(userPhoneNum);
                         et_userinfo_mail.setText(user.getEmail());
-                    }else{
+                    } else {
                         Toast.makeText(UserInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-        }else{
+        } else {
             Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
         }
     }
@@ -132,7 +147,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                 public void done(AVObject avObject, AVException e) {
                                     if (e == null) {
                                         String reminders = avObject.getString("reminders");
-                                        Toast.makeText(UserInfoActivity.this, "账号："+reminders+"有权限对您进行提醒！", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserInfoActivity.this, "账号：" + reminders + "有权限对您进行提醒！", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -142,6 +157,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
 
+                break;
+            case R.id.tv_phone_verification_userinfo:
+                Toast.makeText(this, "绑定手机号服务暂未开通", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -169,6 +187,21 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         dialogEditPW.show();
     }
 
+    public void sendVerificationMsg(final String mobilePhone) {
+        AVUser.requestMobilePhoneVerifyInBackground(mobilePhone, new RequestMobileCodeCallback() {
+
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    Toast.makeText(UserInfoActivity.this, "验证短信发送成功，号码为：" + mobilePhone, Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i("发送失败：", e.getMessage());
+                    Toast.makeText(UserInfoActivity.this, "验证短信发送失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -190,7 +223,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void done(AVException e) {
                 if (e == null) {
-                   // Toast.makeText(UserInfoActivity.this, "修改个人信息成功！", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(UserInfoActivity.this, "修改个人信息成功！", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UserInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

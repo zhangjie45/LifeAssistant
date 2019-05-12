@@ -92,7 +92,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         protected void onPostExecute(Void aVoid) {
             tv_setting_name.setText(users.get(0).getUsername());
             String userPhoneNum = users.get(0).getMobilePhoneNumber();
-            if (userPhoneNum.equals("")) {
+            if (null == userPhoneNum ||userPhoneNum.equals("")) {
                 userPhoneNum = "还未添加手机号";
             }
             tv_setting_phone.setText(userPhoneNum);
@@ -220,7 +220,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         if (user != null) {
             tv_setting_name.setText(user.getUsername());
             String userPhoneNum = user.getMobilePhoneNumber();
-            if (userPhoneNum.equals("")) {
+            if (null == userPhoneNum||userPhoneNum.equals("")) {
                 userPhoneNum = "还未添加手机号";
             }
             tv_setting_phone.setText(userPhoneNum);

@@ -113,6 +113,7 @@
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"
                 android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:paddingTop="15dp">
 
                 <TextView
@@ -131,6 +132,12 @@
                     android:hint="请添加手机号"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_size_default" />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_phone_verification_userinfo"
+                    android:text="未验证"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <TextView

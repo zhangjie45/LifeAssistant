@@ -181,7 +181,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
-        Log.i("ok", "onStart");
+      //  Log.i("ok", "onStart");
         //启动异步操作
         new showCapital().execute();
     }
