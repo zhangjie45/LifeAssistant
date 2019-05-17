@@ -101,7 +101,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         try {
-                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getRemakes());
+                            onItemClickListener.onItemClick(mList.get(position).getType()+"（"+mList.get(position).getIncomeOrexpenditure()+"）", Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getRemakes());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -131,7 +131,7 @@ public class CapitalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         try {
-                            onItemClickListener.onItemClick(mList.get(position).getType(), Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getRemakes());
+                            onItemClickListener.onItemClick(mList.get(position).getType()+"（"+mList.get(position).getIncomeOrexpenditure()+"）", Utils.GMTtoStr(mList.get(position).getDate("time") + ""), mList.get(position).getRemakes());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }

@@ -31,16 +31,25 @@
                 android:textColor="@color/event_agency" />
         </LinearLayout>
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fm_captial_RecyclerView"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:overScrollMode="never"
-            android:scrollbars="none">
+            android:layout_weight="4">
 
-        </android.support.v7.widget.RecyclerView>
+            <com.baoyz.widget.PullRefreshLayout
+                android:id="@+id/capital_swipe_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fm_captial_RecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+                </android.support.v7.widget.RecyclerView>
+            </com.baoyz.widget.PullRefreshLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="0dp"

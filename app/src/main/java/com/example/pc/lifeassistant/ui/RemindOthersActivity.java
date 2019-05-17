@@ -74,6 +74,8 @@ public class RemindOthersActivity extends BaseActivity implements View.OnClickLi
                 usename = users.get(i).get("reminders").toString();
             }
             if (usename.equals(user.getUsername())) {
+                tiet_remind_id.setFocusable(false);
+                tiet_remind_id.setFocusableInTouchMode(false);
                 ll_remind_content.setVisibility(View.VISIBLE);
                 ll_remind_ok.setVisibility(View.VISIBLE);
             } else {
@@ -145,7 +147,9 @@ public class RemindOthersActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(this, "内容字数超过限定长度", Toast.LENGTH_SHORT).show();
         } else if (remindDate.equals("所选日期不能小于今天")) {
             Toast.makeText(this, "所选日期不能小于今天", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if(remindDate.equals("")) {
+            Toast.makeText(this, "日期不能为空", Toast.LENGTH_SHORT).show();
+        }else{
             addRemind();
         }
 

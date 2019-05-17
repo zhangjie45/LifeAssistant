@@ -10,11 +10,15 @@ import android.content.pm.PackageManager;
 public class APKVersionCodeUtils {
     //获取当前版本
     public static int getVersionCode(Context mContext) {
+
         int versionCode = 0;
         try {
             //获取软件版本号，对应AndroidManifest.xml下android:versionCode
-            versionCode = mContext.getPackageManager().
-                    getPackageInfo(mContext.getPackageName(), 0).versionCode;
+            if(mContext != null){
+                versionCode = mContext.getPackageManager().
+                        getPackageInfo(mContext.getPackageName(), 0).versionCode;
+            }
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

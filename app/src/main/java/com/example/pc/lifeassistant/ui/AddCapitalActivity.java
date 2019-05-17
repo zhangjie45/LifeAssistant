@@ -176,6 +176,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
             sharedPreferencesHelper.put("capital_remakes_key", remakes);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(str.getTime());
+            tv_add_capital_date_year.setVisibility(View.VISIBLE);
             tv_add_capital_date_year.setText(calendar.get(Calendar.YEAR) + "");
             tv_add_capital_date_day.setText((calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.DAY_OF_MONTH));
         } else {
@@ -209,6 +210,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                 tv_expense.setTextColor(getResources().getColor(R.color.text_color_default));
                 list.clear();
                 add();
+                tv_type_money_show.setText("一般");
                 typeMoneyAdapter = new TypeMoneyAdapter(this, list);
                 gv_type_money.setAdapter(typeMoneyAdapter);
 
@@ -219,6 +221,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                 tv_income.setTextColor(getResources().getColor(R.color.text_color_default));
                 list.clear();
                 add1();
+                tv_type_money_show.setText("一般");
                 typeMoneyAdapter = new TypeMoneyAdapter(this, list);
                 gv_type_money.setAdapter(typeMoneyAdapter);
                 break;
@@ -413,6 +416,7 @@ public class AddCapitalActivity extends BaseActivity implements View.OnClickList
                         data = year + "/" + month + "/" + dayOfMonth;
                         if (getTimeCompareSize(StrToDate(data)) > 1) {
                             flag_date = false;
+                            tv_add_capital_date_year.setVisibility(View.VISIBLE);
                             tv_add_capital_date_year.setText(year + "");
                             tv_add_capital_date_day.setText(month + "/" + dayOfMonth);
                         } else {

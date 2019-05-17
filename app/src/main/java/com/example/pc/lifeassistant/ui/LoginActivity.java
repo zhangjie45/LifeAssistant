@@ -84,15 +84,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         @Override
                         public void done(AVUser avUser, AVException e) {
                             if (e != null) {
+                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
                                 if (checkbox_remember_login.isChecked()) {
                                     cacheAccount(user, pw);
                                 } else {
                                     sharedPreferencesHelper.clear();
                                 }
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            } else {
                                 skipAnotherActivity(LoginActivity.this, MainActivity.class);
-
                             }
 
                         }

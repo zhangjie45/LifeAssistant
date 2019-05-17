@@ -43,9 +43,7 @@ public class AVService {
         query.setCachePolicy(AVQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.setMaxCacheAge(24 * 3600 * 1000); //设置为一天，单位毫秒
         query.orderByAscending("home_date");
-
         try {
-
             return query.find();
         } catch (AVException e) {
             return Collections.emptyList();

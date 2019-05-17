@@ -90,18 +90,23 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         @SuppressLint("ResourceAsColor")
         @Override
         protected void onPostExecute(Void aVoid) {
-            tv_setting_name.setText(users.get(0).getUsername());
-            String userPhoneNum = users.get(0).getMobilePhoneNumber();
-            if (null == userPhoneNum ||userPhoneNum.equals("")) {
-                userPhoneNum = "还未添加手机号";
-            }
-            tv_setting_phone.setText(userPhoneNum);
-            tv_setting_email.setText(users.get(0).getEmail());
-            if (!((APKVersionCodeUtils.getVersionCode(getActivity()) + "").equals(versionInfo.get(0).getVersion()))) {
-                tv_setting_version.setText("有新版本");
-                tv_setting_version.setTextColor(getResources().getColor(R.color.event_agency));
-            } else {
-                tv_setting_version.setText(APKVersionCodeUtils.getVerName(getActivity()));
+            if(isAdded()){
+                String userPhoneNum = null;
+                if (users.size() != 0) {
+                    tv_setting_name.setText(users.get(0).getUsername());
+                    userPhoneNum = users.get(0).getMobilePhoneNumber();
+                    tv_setting_email.setText(users.get(0).getEmail());
+                }
+                if (null == userPhoneNum || userPhoneNum.equals("")) {
+                    userPhoneNum = "还未添加手机号";
+                }
+                tv_setting_phone.setText(userPhoneNum);
+                if (!((APKVersionCodeUtils.getVersionCode(getActivity()) + "").equals(versionInfo.get(0).getVersion()))) {
+                    tv_setting_version.setText("有新版本");
+                    tv_setting_version.setTextColor(getResources().getColor(R.color.event_agency));
+                } else {
+                    tv_setting_version.setText(APKVersionCodeUtils.getVerName(getActivity()));
+                }
             }
         }
     }
@@ -167,7 +172,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         setHasOptionsMenu(true);
         //用户信息展示
         ShowInfo();
-        new showInfo().execute();
+       // new showInfo().execute();
         return view;
     }
 
@@ -220,7 +225,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         if (user != null) {
             tv_setting_name.setText(user.getUsername());
             String userPhoneNum = user.getMobilePhoneNumber();
-            if (null == userPhoneNum||userPhoneNum.equals("")) {
+            if (null == userPhoneNum || userPhoneNum.equals("")) {
                 userPhoneNum = "还未添加手机号";
             }
             tv_setting_phone.setText(userPhoneNum);

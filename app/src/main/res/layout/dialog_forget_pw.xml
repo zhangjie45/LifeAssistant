@@ -35,10 +35,10 @@
 
     <LinearLayout
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/et_email_forget"
@@ -48,9 +48,10 @@
             android:hint="xx@xx.com"
             tools:ignore="TextFields" />
         <ImageView
+            android:layout_marginTop="10dp"
             android:id="@+id/iv_send_forgetPw"
             android:layout_width="40dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:src="@drawable/icon_send" />
     </LinearLayout>

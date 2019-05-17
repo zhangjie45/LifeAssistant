@@ -18,6 +18,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CloudQueryCallback;
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.pc.lifeassistant.R;
 import com.example.pc.lifeassistant.adapter.CapitalAdapter;
 import com.example.pc.lifeassistant.bean.CapitalInfo;
@@ -25,6 +26,7 @@ import com.example.pc.lifeassistant.interface_.OnItemClickListener;
 import com.example.pc.lifeassistant.ui.AddCapitalActivity;
 import com.example.pc.lifeassistant.util.AVService;
 import com.example.pc.lifeassistant.util.BaseFragment;
+import com.example.pc.lifeassistant.util.DialogCapital;
 import com.example.pc.lifeassistant.util.DialogDelChange;
 import com.example.pc.lifeassistant.util.Utils;
 
@@ -44,6 +46,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
     private TextView tv_monthly_incomel;
     private TextView tv_monthly_expenditure;
     private RecyclerView recyclerView;
+    private PullRefreshLayout capital_swipe_refresh;
     CapitalAdapter adapter;
     private volatile List<CapitalInfo> capitel;
     private volatile List<CapitalInfo> capitel_income;
@@ -51,7 +54,8 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
 
     private DialogDelChange.Builder del_change_builder;
     private DialogDelChange del_change_dialog;
-
+    private DialogCapital dialog_capital;
+    private DialogCapital.Builder dialog_capital_builder;
     AVUser user = AVUser.getCurrentUser();
 
 
@@ -81,19 +85,25 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         @Override
         protected void onPostExecute(Void result) {
             adapter = new CapitalAdapter(getActivity(), capitel);
+            capital_swipe_refresh.setRefreshing(false);
             recyclerView.clearAnimation();
             recyclerView.setAdapter(adapter);
             tv_monthly_incomel.setText(Utils.Count(capitel_income) + "元");
             tv_monthly_expenditure.setText(Utils.Count(capitel_expenditure) + "元");
             adapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
-                public void onItemClick(String title, String date, String remakes) {
-
+                public void onItemClick(String type, String date, String remakes) {
+                    showSingleButtonDialog(type, date, remakes, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog_capital.dismiss();
+                        }
+                    });
                 }
 
 
                 @Override
-                public void onItemLongClick(String week,final String title, final String amount, final Date date, final String remakes, final String ObjectId, final String incomeOrexpenditure, final Integer type_position) {
+                public void onItemLongClick(String week, final String title, final String amount, final Date date, final String remakes, final String ObjectId, final String incomeOrexpenditure, final Integer type_position) {
                     // ToastUtil("点击了删除" + ObjectId);
                     showChangeDelDialog(new View.OnClickListener() {
                         @Override
@@ -152,7 +162,7 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
             name = args.getString("name");
         }
         del_change_builder = new DialogDelChange.Builder(this.getActivity());
-
+        dialog_capital_builder = new DialogCapital.Builder(this.getActivity());
     }
 
 
@@ -170,18 +180,25 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
         tv_monthly_incomel = getActivity().findViewById(R.id.tv_monthly_income);
         tv_monthly_expenditure = getActivity().findViewById(R.id.tv_monthly_expenditure);
         recyclerView = getActivity().findViewById(R.id.fm_captial_RecyclerView);
+        capital_swipe_refresh = getActivity().findViewById(R.id.capital_swipe_refresh);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         tv_tb_add_date.setOnClickListener(this);
         setHasOptionsMenu(true);
+        capital_swipe_refresh.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new showCapital().execute();
+            }
+        });
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-      //  Log.i("ok", "onStart");
+        //  Log.i("ok", "onStart");
         //启动异步操作
         new showCapital().execute();
     }
@@ -204,6 +221,12 @@ public class CapitalFragment extends BaseFragment implements View.OnClickListene
                 .DelChangeButtonDialog();
         del_change_dialog.show();
     }
-
+    //展示自定义dialog
+    private void showSingleButtonDialog(String type, String date, String remakes, View.OnClickListener onClickListener) {
+        dialog_capital = dialog_capital_builder.setMessage(type, date, remakes)
+                .setSingleButton(onClickListener)
+                .createSingleButtonDialog();
+        dialog_capital.show();
+    }
 
 }

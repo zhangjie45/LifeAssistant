@@ -14,36 +14,33 @@ import android.widget.TextView;
 import com.example.pc.lifeassistant.R;
 
 /**
- * Created by pc on 2019/1/6.
+ * Created by pc on 2019/5/16.
  */
 
-public class DialogCustom extends Dialog {
-    public DialogCustom(@NonNull Context context) {
-        super(context);
-    }
-
-    public DialogCustom(@NonNull Context context, int themeResId) {
+public class DialogCapital extends Dialog {
+    public DialogCapital(@NonNull Context context, int themeResId) {
         super(context, themeResId);
     }
 
     public static class Builder {
-        private String title;
+        private String type;
         private String date;
         private String remakes;
         private View contentView;
-        private DialogCustom dialogCustom;
+        private DialogCapital dialogCapital;
         private View.OnClickListener singleButtonClickListener;
         private View layout;
 
         public Builder(Context context) {
-            dialogCustom = new DialogCustom(context, R.style.dialog);
+            dialogCapital = new DialogCapital(context, R.style.dialog);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            layout = inflater.inflate(R.layout.dialog_custom, null);
-            dialogCustom.addContentView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layout = inflater.inflate(R.layout.dialog_capital, null);
+            dialogCapital.addContentView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
         }
 
-        public Builder setMessage(String title, String date, String remakes) {
-            this.title = title;
+        public Builder setMessage(String type, String date, String remakes) {
+            this.type = type;
             this.date = date;
             this.remakes = remakes;
             return this;
@@ -60,29 +57,27 @@ public class DialogCustom extends Dialog {
             return this;
         }
 
-        public DialogCustom createSingleButtonDialog() {
-            layout.findViewById(R.id.img_dialog_custom_back).setOnClickListener(singleButtonClickListener);
+        public DialogCapital createSingleButtonDialog() {
+            layout.findViewById(R.id.img_dialog_capital_back).setOnClickListener(singleButtonClickListener);
             create();
-            return dialogCustom;
+            return dialogCapital;
 
         }
 
         private void create() {
-            if (title != null) {      //设置提示内容
-                ((TextView) layout.findViewById(R.id.tv_dialog_custom_title)).setText(title);
-                ((TextView) layout.findViewById(R.id.tv_dialog_custom_date)).setText(date);
-                ((TextView) layout.findViewById(R.id.tv_dialog_custom_remakes)).setText(remakes);
-
-            } else if (contentView != null) {       //如果使用Builder的setContentview()方法传入了布局，则使用传入的布局
-                ((LinearLayout) layout.findViewById(R.id.dialog_custom_content)).removeAllViews();
-                ((LinearLayout) layout.findViewById(R.id.dialog_custom_content))
+            if (type != null) {      //设置提示内容
+                ((TextView) layout.findViewById(R.id.tv_dialog_capital_type)).setText(type);
+                ((TextView) layout.findViewById(R.id.tv_dialog_capital_date)).setText(date);
+                ((TextView) layout.findViewById(R.id.tv_dialog_capital_remakes)).setText(remakes);
+            } else if (contentView != null) {
+                ((LinearLayout) layout.findViewById(R.id.dialog_capital_content)).removeAllViews();
+                ((LinearLayout) layout.findViewById(R.id.dialog_capital_content))
                         .addView(contentView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
-            dialogCustom.setContentView(layout);
-            dialogCustom.setCancelable(true);     //用户可以点击手机Back键取消对话框显示
-            dialogCustom.setCanceledOnTouchOutside(true);        //用户不能通过点击对话框之外的地方取消对话框显示
+            dialogCapital.setContentView(layout);
+            dialogCapital.setCancelable(true);     //用户可以点击手机Back键取消对话框显示
+            dialogCapital.setCanceledOnTouchOutside(true);        //用户不能通过点击对话框之外的地方取消对话框显示
         }
-
     }
 
     @Override
